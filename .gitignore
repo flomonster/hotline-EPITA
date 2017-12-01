@@ -1,0 +1,12 @@
+# EDITOR
+*.swp
+*~
+\#*\#
+
+# BIN
+*.o
+*.a
+*.d
+*.so
+*.out
+he
