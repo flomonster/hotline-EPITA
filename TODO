@@ -1,0 +1,14 @@
+This is the list of features to implement:
+
+* Map
+  * [ ] Parsing
+  * [ ] Generate hitbox
+  * [ ] Display background
+* Objects
+  * [ ] Player
+  * [ ] Ennemies
+  * [ ] Blocks
+* Game
+  * [ ] Menu
+  * [ ] Loop
+  * [ ] GameOver
