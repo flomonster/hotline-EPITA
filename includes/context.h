@@ -10,5 +10,5 @@ typedef struct context
 } s_context;
 
 
-s_context *context_init();
+s_context *context_create();
 void context_free(s_context *context);

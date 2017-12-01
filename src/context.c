@@ -4,7 +4,7 @@
 #include "context.h"
 
 
-s_context *context_init()
+s_context *context_create()
 {
   s_context *cont = malloc(sizeof (*cont));
 

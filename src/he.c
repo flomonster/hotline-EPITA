@@ -6,7 +6,7 @@ int main(int argc, char **argv)
   argc = argc;
   argv = argv;
 
-  s_context *cont = context_init();
+  s_context *cont = context_create();
 
   SDL_Delay(3000);
 
