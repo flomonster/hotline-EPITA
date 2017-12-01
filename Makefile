@@ -1,7 +1,8 @@
 CC?=gcc
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99
-CPPFLAGS = -MMD -iquote includes $(shell sdl2-config --cflags)
-LDLIBS = $(shell sdl2-config --libs)
+CPPFLAGS = -MMD -iquote includes $(shell sdl2-config --cflags) \
+	$(shell pkg-config SDL2_image --cflags)
+LDLIBS = $(shell sdl2-config --libs) -lSDL2_image
 
 vpath %.c src
 
