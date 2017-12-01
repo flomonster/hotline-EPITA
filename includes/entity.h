@@ -2,6 +2,9 @@
 
 #include <SDL.h>
 
+#include "context.h"
+#include "vect.h"
+
 
 typedef enum dir
 {
