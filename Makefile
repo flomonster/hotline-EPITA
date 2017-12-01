@@ -1,4 +1,4 @@
-CC=gcc
+CC?=gcc
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99
 CPPFLAGS = -MMD -iquote includes $(shell sdl2-config --cflags)
 LDLIBS = $(shell sdl2-config --libs)
