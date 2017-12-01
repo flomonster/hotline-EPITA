@@ -5,14 +5,14 @@
 
 typedef struct rect_list
 {
-  SDL_Rect data;
+  SDL_Rect rect;
   struct rect_list *next;
 } s_rect_list;
 
 #define RECT_LIST(X, Y, W, H)   \
   (s_rect_list)                 \
   {                             \
-    .data =                     \
+    .rect =                     \
     {                           \
       .x = (X),                 \
       .y = (Y),                 \

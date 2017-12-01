@@ -1,6 +1,7 @@
 #include "pixutils.h"
 #include "rect_list.h"
 #include "utils.h"
+#include "rectangulize.h"
 
 #include <SDL.h>
 #include <stdbool.h>
@@ -53,9 +54,9 @@ static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
 }
 
 
-struct rect_list *rectangulize(SDL_Surface *img)
+s_rect_list *rectangulize(SDL_Surface *img)
 {
-  struct rect_list *res = NULL;
+  s_rect_list *res = NULL;
 
   for (int y = 0; y < img->h; y++)
     for (int x = 0; x < img->w; x++)
