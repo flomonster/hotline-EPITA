@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "context.h"
 
@@ -11,6 +12,13 @@ s_context *context_create()
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
   {
     SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
+    free(cont);
+    return NULL;
+  }
+
+  if (IMG_Init(IMG_INIT_PNG))
+  {
+    SDL_Log("Unable to initialize SDL_Image: %s\n", IMG_GetError());
     free(cont);
     return NULL;
   }
