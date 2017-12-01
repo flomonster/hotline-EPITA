@@ -16,7 +16,7 @@ s_context *context_create()
     return NULL;
   }
 
-  if (IMG_Init(IMG_INIT_PNG))
+  if (!IMG_Init(IMG_INIT_PNG))
   {
     SDL_Log("Unable to initialize SDL_Image: %s\n", IMG_GetError());
     free(cont);
