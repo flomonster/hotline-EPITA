@@ -58,7 +58,7 @@ static void game_draw(s_game *game)
 }
 
 
-static void game_update(s_game *game)
+static void game_update(s_game *game, double delta)
 {
   input_update(&game->input);
 
@@ -85,14 +85,11 @@ void game_loop(s_game *game)
   {
     time_last = time_now;
     time_now = SDL_GetPerformanceCounter();
-    double delta_time = (time_now - time_last) * 1000 / frequency;
+    double delta = (time_now - time_last) / frequency;
 
-    game_update(game);
+    game_update(game, delta);
     game_draw(game);
     renderer_draw(&game->renderer);
-
-    if (delta_time < 1000 / FRAME_RATE)
-      SDL_Delay(1000 / FRAME_RATE - delta_time);
   }
 }
 
