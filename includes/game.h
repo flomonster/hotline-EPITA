@@ -5,9 +5,6 @@
 
 #include <stdbool.h>
 
-#define RENDER_SCALE_FACTOR 8
-#define SAMPLE_FACTOR 2
-
 
 typedef struct game
 {

@@ -15,7 +15,7 @@ void renderer_init(s_renderer *r, SDL_Window *window,
 
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
                                              SDL_RENDERER_ACCELERATED);
-
+  SDL_RenderSetScale(renderer, 1. / sample_factor, 1. / sample_factor);
   r->renderer = renderer;
   r->sample_factor = sample_factor;
 }

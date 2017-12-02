@@ -1,6 +1,7 @@
 #include "game.h"
 #include "renderer.h"
 #include "utils.h"
+#include "const.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
