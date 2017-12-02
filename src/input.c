@@ -38,6 +38,7 @@ void input_handle_event(s_input *input, SDL_Event *event)
       input->left_click = true;
     if (event->button.button == SDL_BUTTON_RIGHT)
       input->right_click = true;
+    break;
   case SDL_MOUSEBUTTONUP:
     if (event->button.button == SDL_BUTTON_LEFT)
       input->left_click = false;
