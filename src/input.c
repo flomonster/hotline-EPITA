@@ -1,4 +1,5 @@
 #include "input.h"
+#include "const.h"
 
 #include <SDL.h>
 #include <stdbool.h>
@@ -7,8 +8,8 @@
 void input_init(s_input *input)
 {
   memset(input->keys, 0, sizeof (input->keys));
-  input->mouse_pos.x = 0;
-  input->mouse_pos.y = 0;
+  input->mouse_pos.x = 0.;
+  input->mouse_pos.y = 0.;
   input->left_click = false;
   input->right_click = false;
 }
@@ -30,8 +31,8 @@ void input_handle_event(s_input *input, SDL_Event *event)
     input->keys[event->key.keysym.scancode] = false;
     break;
   case SDL_MOUSEMOTION:
-    input->mouse_pos.x = event->motion.x;
-    input->mouse_pos.y = event->motion.y;
+    input->mouse_pos.x = event->motion.x * 1. / SCALE_FACTOR;
+    input->mouse_pos.y = event->motion.y * 1. / SCALE_FACTOR;
     break;
   case SDL_MOUSEBUTTONDOWN:
     if (event->button.button == SDL_BUTTON_LEFT)
