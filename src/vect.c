@@ -1,4 +1,5 @@
 #include <math.h>
+#include <SDL.h>
 
 #include "vect.h"
 
@@ -27,4 +28,15 @@ double vect_dist(s_vect a, s_vect b)
 s_vect vect_mult(s_vect a, double s)
 {
   return VECT(a.x * s, a.y * s);
+}
+
+
+SDL_Point vect_to_SDL(s_vect v, double factor)
+{
+  s_vect scaled = vect_mult(v, factor);
+  SDL_Point p =
+  {
+    .x = round(scaled.x), .y = round(scaled.y),
+  };
+  return p;
 }
