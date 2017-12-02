@@ -22,3 +22,9 @@ double vect_dist(s_vect a, s_vect b)
   s_vect v = vect_sub(b, a);
   return sqrt(pow(v.x, 2) + pow(v.y, 2));
 }
+
+
+s_vect vect_mult(s_vect a, double s)
+{
+  return VECT(a.x * s, a.y * s);
+}
