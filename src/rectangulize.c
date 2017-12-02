@@ -20,7 +20,7 @@ static bool is_wall(SDL_Surface *img, int x, int y)
 
 static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
 {
-  int lh = 0;
+  int lh = 1;
   int lw = 0;
 
   for (int i = x; i < img->w; i++)
@@ -46,7 +46,7 @@ static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
       set_pixel(img, i, y + lh, PIX_WHITE);
 
     lh++;
-  } while (y + lh >= img->h);
+  } while (y + lh < img->h);
 
   s_rect_list *ret = xmalloc(sizeof(*ret));
   *ret = RECT_LIST(x, y, lw, lh);
