@@ -1,7 +1,8 @@
 #pragma once
 
-#include "vect.h"
+#include "rect.h"
 #include "renderer.h"
+#include "vect.h"
 
 typedef struct sprite
 {
@@ -15,5 +16,5 @@ typedef struct sprite
 void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path);
 void sprite_init(s_sprite *s, s_vect pos, double angle);
 void sprite_destroy(s_sprite *s);
-SDL_Rect sprite_rect(s_sprite *s);
+s_rect sprite_rect(s_sprite *s);
 void sprite_draw(s_sprite *s, s_renderer *r);

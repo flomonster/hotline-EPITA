@@ -50,3 +50,12 @@ void sprite_draw(s_sprite *s, s_renderer *r)
   SDL_RenderCopyEx(r->renderer, s->texture, &src, &dst,
                    s->angle, &ori, SDL_FLIP_NONE);
 }
+
+
+s_rect sprite_rect(s_sprite *s)
+{
+  s_vect half_size = vect_mult(s->size, .5);
+  s_vect top_left = vect_sub(s->pos, half_size);
+
+  return RECT(top_left, s->size);
+}

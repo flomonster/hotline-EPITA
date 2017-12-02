@@ -2,10 +2,11 @@
 #include "sprite.h"
 
 
-void entity_init(s_entity *ent, s_sprite s, e_dir dir)
+void entity_init(s_entity *ent, s_sprite s, int life, float speed)
 {
   ent->sprite = s;
-  ent->dir = dir;
+  ent->life = life;
+  ent->speed = speed;
 }
 
 

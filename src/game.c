@@ -69,7 +69,7 @@ static void game_update(s_game *game, double delta)
   if (input_key_down(&game->input, SDL_SCANCODE_TAB))
     game->debug = !game->debug;
 
-  player_update(&game->player, game);
+  player_update(&game->player, game, delta);
 }
 
 

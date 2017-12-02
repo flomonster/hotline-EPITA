@@ -1,36 +1,36 @@
+#include "const.h"
 #include "entity.h"
 #include "game.h"
 #include "player.h"
-#include "const.h"
+#include "rect.h"
+#include "walls.h"
 
 #include <math.h>
 
 
-static void player_move(s_player *player, double delta)
+static void player_move(s_player *player, e_dir dir, double delta)
 {
   float dx = 0;
   float dy = 0;
-  dy += player->entity.dir & DIR_TOP ? -1 : 0;
-  dy += player->entity.dir & DIR_BOTTOM ? 1 : 0;
-  dx += player->entity.dir & DIR_RIGHT ? 1 : 0;
-  dx += player->entity.dir & DIR_LEFT ? -1 : 0;
+  dy += dir & DIR_TOP ? -1 : 0;
+  dy += dir & DIR_BOTTOM ? 1 : 0;
+  dx += dir & DIR_RIGHT ? 1 : 0;
+  dx += dir & DIR_LEFT ? -1 : 0;
   if (dx || dy)
   {
-    s_vect dir = vect_mult(vect_normalize(VECT(dx, dy)),
-                           player->speed * delta * SAMPLE_FACTOR);
-    player->entity.sprite.pos = vect_add(player->entity.sprite.pos, dir);
+    s_vect direction = vect_mult(vect_normalize(VECT(dx, dy)),
+                           player->entity.speed * delta * SAMPLE_FACTOR);
+    player->entity.sprite.pos = vect_add(player->entity.sprite.pos, direction);
   }
 }
 
 
 void player_init(s_player *player, s_renderer *renderer, s_vect pos)
 {
-  player->life = 2;
-  player->speed = 1;
   s_sprite sprite;
   sprite_init_texture(&sprite, renderer, "res/player.png");
   sprite_init(&sprite, pos, 0);
-  entity_init(&player->entity, sprite, DIR_NONE);
+  entity_init(&player->entity, sprite, 2, 1);
 }
 
 
@@ -46,22 +46,42 @@ void player_update(s_player *player, s_game *game, double delta)
   double dx = game->input.mouse_pos.x - player->entity.sprite.pos.x;
   player->entity.sprite.angle = atan2(dy, dx) * 180. / M_PI + 90.;
 
-  player->entity.dir = DIR_NONE;
+  e_dir dir = DIR_NONE;
   if (input_key_pressed(&game->input, SDL_SCANCODE_W))
-    player->entity.dir |= DIR_TOP;
+    dir |= DIR_TOP;
   if (input_key_pressed(&game->input, SDL_SCANCODE_D))
-    player->entity.dir |= DIR_RIGHT;
+    dir |= DIR_RIGHT;
   if (input_key_pressed(&game->input, SDL_SCANCODE_S))
-    player->entity.dir |= DIR_BOTTOM;
+    dir |= DIR_BOTTOM;
   if (input_key_pressed(&game->input, SDL_SCANCODE_A))
-    player->entity.dir |= DIR_LEFT;
+    dir |= DIR_LEFT;
 
-  if ((player->entity.dir & DIR_LEFT) && (player->entity.dir & DIR_RIGHT))
-    player->entity.dir &= ~(DIR_LEFT | DIR_RIGHT);
-  if ((player->entity.dir & DIR_TOP) && (player->entity.dir & DIR_BOTTOM))
-    player->entity.dir &= ~(DIR_BOTTOM | DIR_TOP);
+  if ((dir & DIR_LEFT) && (dir & DIR_RIGHT))
+    dir &= ~(DIR_LEFT | DIR_RIGHT);
+  if ((dir & DIR_TOP) && (dir & DIR_BOTTOM))
+    dir &= ~(DIR_BOTTOM | DIR_TOP);
 
-  player_move(player, delta);
+  s_vect mem = player->entity.sprite.pos;
+
+  s_rect rect = sprite_rect(&player->entity.sprite);
+
+  printf("BEFORE: %f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
+  player_move(player, dir, delta);
+  printf("AFTER: %f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
+  if (!wall_collides(&game->map, &rect))
+    return;
+  player->entity.sprite.pos = mem;
+  printf("collide (roll back): ");
+  printf("%f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
+
+  /*
+  if ((dir | DIR_LEFT) || (dir | DIR_RIGHT))
+    player_move(player, dir);
+  if (!wall_collides(&game->map, &rect))
+    return;
+  else
+    player->entity.sprite.pos = mem;
+  */
 }
 
 
