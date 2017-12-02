@@ -41,6 +41,7 @@ static SDL_Window *window_create(void)
 void game_init(s_game *game)
 {
   game->window = window_create();
+  game->debug = false;
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   renderer_init_font(&game->renderer, "res/hellovetica.ttf", 8);
   input_init(&game->input);
@@ -56,6 +57,9 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 
   if (input_key_pressed(&game->input, SDL_SCANCODE_ESCAPE))
     game->is_running = false;
+
+  if (input_key_pressed(&game->input, SDL_SCANCODE_TAB) && !game->debug)
+    game->debug = !game->debug;
 
   switch (event->type)
   {

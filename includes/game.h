@@ -14,6 +14,7 @@ typedef struct game
   s_input input;
   s_map map;
   bool is_running;
+  bool debug;
   s_player player;
 } s_game;
 
