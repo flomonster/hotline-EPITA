@@ -45,6 +45,7 @@ void game_init(s_game *game)
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "test");
   game->is_running = false;
+  player_init(&game->player, &game->renderer, VECT(50, 50));
 }
 
 
@@ -69,6 +70,13 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 static void game_draw(s_game *game)
 {
   map_draw(&game->map, &game->renderer);
+  player_draw(&game->player, &game->renderer);
+}
+
+
+static void game_update(s_game *game)
+{
+  player_update(&game->player, game);
 }
 
 
@@ -90,6 +98,7 @@ void game_loop(s_game *game)
     while (SDL_WaitEventTimeout(&event, 0))
       game_handle_event(game, &event);
 
+    game_update(game);
     game_draw(game);
     // TODO: call entities update functions
     SDL_RenderPresent(game->renderer.renderer);
@@ -104,4 +113,5 @@ void game_destroy(s_game *game)
   map_destroy(&game->map);
   renderer_destroy(&game->renderer);
   SDL_DestroyWindow(game->window);
+  player_destroy(&game->player);
 }
