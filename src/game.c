@@ -9,7 +9,23 @@
 void game_init(s_game *game)
 {
   game->context = context_create();
+  keyboard_init(&game->keyboard);
   game->isRunning = false;
+}
+
+
+static void game_handle_event(s_game *game, SDL_Event *event)
+{
+  keyboard_handle_event(&game->keyboard, event);
+
+  switch (event->type)
+  {
+  case SDL_QUIT:
+    game->isRunning = false;
+    break;
+  default:
+    break;
+  }
 }
 
 
@@ -27,7 +43,11 @@ void game_loop(s_game *game)
     time_now = SDL_GetPerformanceCounter();
     double delta_time = (time_now - time_last) * 1000 / frequency;
 
-    // TODO
+    SDL_Event event;
+    while (SDL_WaitEventTimeout(&event, 0))
+      game_handle_event(game, &event);
+
+    // TODO: call entities update functions
 
     if (delta_time < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE - delta_time);

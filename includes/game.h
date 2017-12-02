@@ -1,6 +1,7 @@
 #pragma once
 
 #include "context.h"
+#include "keyboard.h"
 
 #include <stdbool.h>
 
@@ -8,6 +9,7 @@
 typedef struct game
 {
   s_context *context;
+  s_keyboard keyboard;
   bool isRunning;
 } s_game;
 
