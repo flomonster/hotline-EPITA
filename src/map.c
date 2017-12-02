@@ -20,8 +20,8 @@ void map_init(s_map *map, s_renderer *r, char *name)
   sprintf(bg_name, "%s%s%s", pre, name, bg_suf);
   sprintf(layout_name, "%s%s%s", pre, name, layout_suf);
 
-  // SDL_Surface *layout_surf = IMG_Load(layout_name);
-  // map->rect_list = rectangulize(layout_surf);
+  SDL_Surface *layout_surf = IMG_Load(layout_name);
+  map->rect_list = rectangulize(layout_surf);
 
   sprite_init_texture(&map->sprite, r, bg_name);
   s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
