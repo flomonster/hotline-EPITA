@@ -6,7 +6,7 @@
 #include <math.h>
 
 
-static void player_move(s_player *player)
+static void player_move(s_player *player, double delta)
 {
   float dx = 0;
   float dy = 0;
@@ -16,7 +16,8 @@ static void player_move(s_player *player)
   dx += player->entity.dir & DIR_LEFT ? -1 : 0;
   if (dx || dy)
   {
-    s_vect dir = vect_mult(vect_normalize(VECT(dx, dy)), player->speed);
+    s_vect dir = vect_mult(vect_normalize(VECT(dx, dy)),
+                           player->speed * delta * SAMPLE_FACTOR);
     player->entity.sprite.pos = vect_add(player->entity.sprite.pos, dir);
   }
 }
@@ -39,7 +40,7 @@ void player_draw(s_player *player, s_renderer *renderer)
 }
 
 
-void player_update(s_player *player, s_game *game)
+void player_update(s_player *player, s_game *game, double delta)
 {
   double dy = game->input.mouse_pos.y - player->entity.sprite.pos.y;
   double dx = game->input.mouse_pos.x - player->entity.sprite.pos.x;
@@ -60,7 +61,7 @@ void player_update(s_player *player, s_game *game)
   if ((player->entity.dir & DIR_TOP) && (player->entity.dir & DIR_BOTTOM))
     player->entity.dir &= ~(DIR_BOTTOM | DIR_TOP);
 
-  player_move(player);
+  player_move(player, delta);
 }
 
 
