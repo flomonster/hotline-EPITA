@@ -2,6 +2,7 @@
 
 #include "entity.h"
 
+struct game;
 
 typedef struct player
 {
@@ -11,7 +12,7 @@ typedef struct player
 } s_player;
 
 
-void player_init(s_game *game, s_player *player, s_vect pos);
-void player_draw(s_game *game, s_player *player);
-void player_update(s_game *game, s_player *player);
+void player_init(s_player *player, s_renderer *renderer, s_vect pos);
+void player_draw(s_player *player, s_renderer *renderer);
+void player_update(s_player *player, struct game *game);
 void player_destroy(s_player *player);
