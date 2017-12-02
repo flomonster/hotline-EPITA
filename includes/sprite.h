@@ -4,6 +4,9 @@
 #include "renderer.h"
 #include "vect.h"
 
+#include <stdbool.h>
+
+
 typedef struct sprite
 {
   SDL_Texture *texture;
@@ -17,4 +20,4 @@ void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path);
 void sprite_init(s_sprite *s, s_vect pos, double angle);
 void sprite_destroy(s_sprite *s);
 s_rect sprite_rect(s_sprite *s, double factor);
-void sprite_draw(s_sprite *s, s_renderer *r);
+void sprite_draw(s_sprite *s, s_renderer *r, bool rel_to_camera);

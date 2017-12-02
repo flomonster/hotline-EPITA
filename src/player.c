@@ -82,7 +82,7 @@ void player_init(s_player *player, s_renderer *renderer, s_vect pos)
 
 void player_draw(s_player *player, s_renderer *r, bool debug)
 {
-  sprite_draw(&player->entity.sprite, r);
+  sprite_draw(&player->entity.sprite, r, true);
 
   if (!debug)
     return;

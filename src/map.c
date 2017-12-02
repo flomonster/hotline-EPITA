@@ -42,7 +42,7 @@ void map_init(s_map *map, s_renderer *r, char *name)
 
 void map_draw(s_map *map, s_renderer *r, bool debug)
 {
-  sprite_draw(&map->sprite, r);
+  sprite_draw(&map->sprite, r, true);
 
   if (!debug)
     return;

@@ -50,7 +50,7 @@ void renderer_init_font(s_renderer *r, char *font_name, int font_size)
 
 void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
 {
-  SDL_Surface *surf = TTF_RenderText_Solid(r->font, text, clr);
+  SDL_Surface *surf = TTF_RenderText_Blended(r->font, text, clr);
   if (surf == NULL)
   {
     SDL_Log("Unable to render text: %s\n", TTF_GetError());

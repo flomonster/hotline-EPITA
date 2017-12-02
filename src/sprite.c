@@ -35,10 +35,12 @@ void sprite_destroy(s_sprite *s)
 }
 
 
-void sprite_draw(s_sprite *s, s_renderer *r)
+void sprite_draw(s_sprite *s, s_renderer *r, bool rel_to_camera)
 {
   s_vect half_size = vect_mult(s->size, .5);
-  s_vect top_left = renderer_absolute_to_camera(r, vect_sub(s->pos, half_size));
+  s_vect top_left = vect_sub(s->pos, half_size);
+  if (rel_to_camera)
+    top_left = renderer_absolute_to_camera(r, top_left);
 
   s_vect scaled_top_left = renderer_project(r, top_left);
   s_vect scaled_size = renderer_project(r, s->size);

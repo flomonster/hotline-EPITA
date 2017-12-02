@@ -2,6 +2,7 @@
 #include "renderer.h"
 #include "utils.h"
 #include "const.h"
+#include "score.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -43,11 +44,12 @@ void game_init(s_game *game)
   game->window = window_create();
   game->debug = false;
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
-  renderer_init_font(&game->renderer, "res/font.ttf", 25);
+  renderer_init_font(&game->renderer, "res/font.ttf", 20);
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "fourth-floor");
   game->is_running = false;
   player_init(&game->player, &game->renderer, player_find_pos(&game->map));
+  score_init(&game->score, &game->renderer, 60.);
 }
 
 
@@ -57,6 +59,7 @@ static void game_draw(s_game *game)
   SDL_RenderClear(game->renderer.renderer);
   map_draw(&game->map, &game->renderer, game->debug);
   player_draw(&game->player, &game->renderer, game->debug);
+  score_draw(&game->score, &game->renderer);
 }
 
 
@@ -73,6 +76,8 @@ static void game_update(s_game *game, double delta)
 
   player_update(&game->player, game, delta);
 
+  score_update(&game->score, delta);
+
   renderer_update(&game->renderer, game);
 }
 
@@ -82,7 +87,7 @@ void game_loop(s_game *game)
   game->is_running = true;
 
   uint64_t time_last = 0;
-  uint64_t time_now = 0;
+  uint64_t time_now = SDL_GetPerformanceCounter();
   double frequency = SDL_GetPerformanceFrequency();
 
   while (game->is_running)
