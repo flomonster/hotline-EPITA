@@ -56,7 +56,7 @@ static void game_draw(s_game *game)
   SDL_SetRenderDrawColor(game->renderer.renderer, 0, 0, 0, 255);
   SDL_RenderClear(game->renderer.renderer);
   map_draw(&game->map, &game->renderer, game->debug);
-  player_draw(&game->player, &game->renderer);
+  player_draw(&game->player, &game->renderer, game->debug);
 }
 
 

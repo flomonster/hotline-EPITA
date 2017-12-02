@@ -49,7 +49,7 @@ static bool player_move_try(s_game *game, s_player *player, e_dir dir,
 {
   s_vect mem = player->entity.sprite.pos;
   player_move(player, dir, delta);
-  s_rect rect = sprite_rect(&player->entity.sprite);
+  s_rect rect = sprite_rect(&player->entity.sprite, .5);
   if (wall_collides(&game->map, &rect))
   {
     player->entity.sprite.pos = mem;
@@ -63,13 +63,22 @@ void player_init(s_player *player, s_renderer *renderer, s_vect pos)
   s_sprite sprite;
   sprite_init_texture(&sprite, renderer, "res/player.png");
   sprite_init(&sprite, pos, 0);
-  entity_init(&player->entity, sprite, 2, 10);
+  entity_init(&player->entity, sprite, 2, 15);
 }
 
 
-void player_draw(s_player *player, s_renderer *renderer)
+void player_draw(s_player *player, s_renderer *r, bool debug)
 {
-  sprite_draw(&player->entity.sprite, renderer);
+  sprite_draw(&player->entity.sprite, r);
+
+  if (!debug)
+    return;
+
+  s_rect rect = sprite_rect(&player->entity.sprite, .5);
+  s_vect top_left = renderer_project(r,
+    renderer_absolute_to_camera(r, rect.pos));
+  s_vect size = renderer_project(r, rect.size);
+  renderer_draw_rect(r, RECT(top_left, size), RGB(255, 0, 0));
 }
 
 
