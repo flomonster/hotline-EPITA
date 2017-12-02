@@ -7,8 +7,7 @@
 #include <SDL_image.h>
 
 
-void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path,
-                         double scale)
+void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path)
 {
   SDL_Surface *image = IMG_Load(text_path);
   if (!image)
@@ -17,7 +16,7 @@ void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path,
     return;
   }
   s->texture = SDL_CreateTextureFromSurface(r->renderer, image);
-  s->size = VECT(image->w * scale, image->h * scale);
+  s->size = VECT(image->w, image->h);
   SDL_FreeSurface(image);
 }
 

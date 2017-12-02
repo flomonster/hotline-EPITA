@@ -23,7 +23,7 @@ void map_init(s_map *map, s_renderer *r, char *name)
   // SDL_Surface *layout_surf = IMG_Load(layout_name);
   // map->rect_list = rectangulize(layout_surf);
 
-  sprite_init_texture(&map->sprite, r, layout_name, 1.);
+  sprite_init_texture(&map->sprite, r, bg_name);
 
   free(bg_name);
   free(layout_name);

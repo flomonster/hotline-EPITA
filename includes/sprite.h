@@ -12,8 +12,7 @@ typedef struct sprite
 } s_sprite;
 
 
-void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path,
-                         double scale);
+void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path);
 void sprite_init(s_sprite *s, s_vect pos, double angle);
 void sprite_destroy(s_sprite *s);
 SDL_Rect sprite_rect(s_sprite *s);
