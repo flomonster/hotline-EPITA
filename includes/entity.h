@@ -3,7 +3,7 @@
 #include <SDL.h>
 
 #include "game.h"
-#include "vect.h"
+#include "sprite.h"
 
 
 typedef enum dir
@@ -22,17 +22,10 @@ typedef enum dir
 
 typedef struct entity
 {
-  SDL_Texture *texture;
-  s_vect pos;
-  s_vect size;
   e_dir dir;
-  double angle;
+  s_sprite *sprite;
 } s_entity;
 
 
-void entity_init_texture(s_entity *ent, s_game *game, char *text_path,
-                         float scale);
-void entity_init(s_entity *ent, s_vect pos, e_dir dir, double angle);
+void entity_init(s_entity *ent, s_sprite *s, e_dir dir);
 void entity_destroy(s_entity *ent);
-SDL_Rect entity_rect(s_entity *entity);
-void entity_draw(s_game *game, s_entity *entity);

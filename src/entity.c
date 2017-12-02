@@ -1,41 +1,15 @@
-#include <SDL.h>
-#include <SDL_image.h>
-
 #include "entity.h"
+#include "sprite.h"
 
 
-void entity_init_texture(s_entity *ent, s_game *game, char *text_path,
-                         float scale)
+void entity_init(s_entity *ent, s_sprite *s, e_dir dir)
 {
-  SDL_Surface *image = IMG_Load(text_path);
-  if (!image)
-  {
-    SDL_Log("IMG_load failed: %s\n", IMG_GetError());
-    return;
-  }
-  ent->texture = SDL_CreateTextureFromSurface(game->renderer, image);
-  ent->size = VECT(image->w * scale, image->h * scale);
-  SDL_FreeSurface(image);
-}
-
-
-void entity_init(s_entity *ent, s_vect pos, e_dir dir, double angle)
-{
-  ent->pos = pos;
+  ent->sprite = s;
   ent->dir = dir;
-  ent->angle = angle;
 }
 
 
 void entity_destroy(s_entity *ent)
 {
-  SDL_DestroyTexture(ent->texture);
-}
-
-
-void entity_draw(s_game *game, s_entity *entity)
-{
-  SDL_Rect rect = entity_rect(entity);
-  SDL_RenderCopyEx(game->renderer, entity->texture, NULL, &rect,
-                   entity->angle, NULL, SDL_FLIP_NONE);
+  sprite_destroy(ent->sprite);
 }
