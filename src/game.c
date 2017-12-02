@@ -56,6 +56,7 @@ void game_init(s_game *game)
   input_init(&game->input);
   map_init(&game->map, game->renderer, "test");
   game->isRunning = false;
+  game->sample_factor = SAMPLE_FACTOR;
 }
 
 

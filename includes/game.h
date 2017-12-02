@@ -5,6 +5,9 @@
 
 #include <stdbool.h>
 
+#define RENDER_SCALE_FACTOR 8
+#define SAMPLE_FACTOR 2
+
 
 typedef struct game
 {
@@ -13,6 +16,7 @@ typedef struct game
   s_input input;
   s_map map;
   bool isRunning;
+  double sample_factor;
 } s_game;
 
 
