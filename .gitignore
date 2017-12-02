@@ -2,6 +2,7 @@
 *.swp
 *~
 \#*\#
+.vscode
 
 # BIN
 *.o
