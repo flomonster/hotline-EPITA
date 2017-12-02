@@ -19,7 +19,7 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 {
   input_handle_event(&game->input, event);
 
-  if (input_pressed(&game->input, SDL_SCANCODE_ESCAPE))
+  if (input_key_pressed(&game->input, SDL_SCANCODE_ESCAPE))
     game->isRunning = false;
 
   switch (event->type)

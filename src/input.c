@@ -12,7 +12,7 @@ void input_init(s_input *input)
 }
 
 
-bool input_pressed(s_input *input, SDL_Keycode code)
+bool input_key_pressed(s_input *input, SDL_Keycode code)
 {
   return input->keys[code];
 }
