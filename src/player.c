@@ -31,7 +31,7 @@ static void player_shoot(s_game *game, s_player *player)
   s_vect p2 = game->input.mouse_pos;
 
   double dist_wall = INFINITY;
-  for (s_rect_list *rlist = game->map.rect_list; rlist; rlist = rlist->next)
+  for (s_rect_list *rlist = game->map.walls; rlist; rlist = rlist->next)
   {
     SDL_Rect *r = &rlist->rect;
     s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
