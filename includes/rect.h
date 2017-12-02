@@ -5,6 +5,16 @@
 #include <SDL.h>
 
 
+#define SDL_RECT(X, Y, W, H)                  \
+  ((SDL_Rect)                                 \
+  {                                           \
+    .x = (X),                                 \
+    .y = (Y),                                 \
+    .w = (W),                                 \
+    .h = (H),                                 \
+  })
+
+
 #define RECT(Pos, Size)                       \
   ((s_rect)                                   \
   {                                           \
