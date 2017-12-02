@@ -7,6 +7,7 @@
 #include "rect.h"
 #include "const.h"
 #include "walls.h"
+#include "enemy.h"
 
 #include <err.h>
 #include <SDL.h>
@@ -29,7 +30,7 @@ void map_init(s_map *map, s_renderer *r, char *name)
 
   SDL_Surface *layout_surf = IMG_Load(layout_name);
   map->walls = wall_find(layout_surf);
-
+  map->enemies = enemies_load(layout_surf);
   sprite_init_texture(&map->sprite, r, bg_name);
   s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
   sprite_init(&map->sprite, center_pos, 0.);

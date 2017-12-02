@@ -8,12 +8,14 @@
 #include "vect.h"
 #include "renderer.h"
 #include "sprite.h"
+#include "enemy.h"
 
 
 typedef struct map
 {
   s_sprite sprite;
   s_rect_list *walls;
+  s_enemy_list *enemies;
   SDL_Surface *layout_surf;
 } s_map;
 
