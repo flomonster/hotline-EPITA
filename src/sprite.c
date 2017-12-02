@@ -37,7 +37,8 @@ void sprite_destroy(s_sprite *s)
 
 void sprite_draw(s_sprite *s, s_renderer *r)
 {
-  s_vect top_left = vect_sub(s->pos, vect_mult(s->size, .5));
+  s_vect half_size = vect_mult(s->size, .5);
+  s_vect top_left = vect_sub(s->pos, half_size);
 
   // Scale the destination to the display.
   s_rect scaled_dst = rect_mult(RECT(top_left, s->size), SCALE_FACTOR);
@@ -45,7 +46,7 @@ void sprite_draw(s_sprite *s, s_renderer *r)
   // Scale to the sample factor.
   SDL_Rect src = rect_to_SDL(RECT(VECT(0, 0), s->size), r->sample_factor);
   SDL_Rect dst = rect_to_SDL(scaled_dst, r->sample_factor);
-  SDL_Point ori = vect_to_SDL(s->pos, r->sample_factor);
+  SDL_Point ori = vect_to_SDL(vect_mult(half_size, SCALE_FACTOR), r->sample_factor);
   SDL_RenderCopyEx(r->renderer, s->texture, &src, &dst,
                    s->angle, &ori, SDL_FLIP_NONE);
 }
