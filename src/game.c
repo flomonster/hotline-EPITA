@@ -1,4 +1,5 @@
 #include "game.h"
+#include "renderer.h"
 #include "utils.h"
 
 #include <SDL.h>
@@ -35,28 +36,14 @@ static SDL_Window *window_create(void)
   return window;
 }
 
-static SDL_Renderer *renderer_create(SDL_Window *window)
-{
-  if (!IMG_Init(IMG_INIT_PNG))
-  {
-    SDL_Log("Unable to initialize SDL_Image: %s\n", IMG_GetError());
-    return NULL;
-  }
-
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
-                                             SDL_RENDERER_ACCELERATED);
-
-  return renderer;
-}
 
 void game_init(s_game *game)
 {
   game->window = window_create();
-  game->renderer = renderer_create(game->window);
+  renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   input_init(&game->input);
-  map_init(&game->map, game->renderer, "test");
+  map_init(&game->map, &game->renderer, "test");
   game->isRunning = false;
-  game->sample_factor = SAMPLE_FACTOR;
 }
 
 
@@ -80,18 +67,7 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 
 static void game_draw(s_game *game)
 {
-  SDL_Rect src =
-  {
-    .x = 0, .y = 0,
-    .w = game->map.size.x, .h = game->map.size.y,
-  };
-
-  SDL_RenderCopy(game->renderer,
-                 game->map.texture,
-                 &src,
-                 NULL);
-
-  SDL_RenderPresent(game->renderer);
+  map_draw(&game->map, &game->renderer);
 }
 
 
@@ -124,7 +100,7 @@ void game_loop(s_game *game)
 
 void game_destroy(s_game *game)
 {
-  SDL_DestroyRenderer(game->renderer);
-  SDL_DestroyWindow(game->window);
   map_destroy(&game->map);
+  renderer_destroy(&game->renderer);
+  SDL_DestroyWindow(game->window);
 }

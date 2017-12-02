@@ -12,11 +12,10 @@
 typedef struct game
 {
   SDL_Window *window;
-  SDL_Renderer *renderer;
+  s_renderer renderer;
   s_input input;
   s_map map;
   bool isRunning;
-  double sample_factor;
 } s_game;
 
 

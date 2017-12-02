@@ -9,7 +9,7 @@ void player_init(s_game *game, s_player *player, s_vect pos)
   player->life = 2;
   player->speed = 1;
   s_sprite sprite;
-  sprite_init_texture(&sprite, game, "res/player.png", 1);
+  sprite_init_texture(&sprite, &game->renderer, "res/player.png", 1);
   sprite_init(&sprite, pos, 0);
   entity_init(&player->entity, sprite, DIR_NONE);
 }

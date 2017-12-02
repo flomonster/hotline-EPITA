@@ -1,13 +1,15 @@
+#include "game.h"
 #include "rect_list.h"
 #include "utils.h"
 #include "map.h"
 #include "rectangulize.h"
+#include "sprite.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
 
 
-void map_init(s_map *map, SDL_Renderer *renderer, char *name)
+void map_init(s_map *map, s_renderer *r, char *name)
 {
   size_t len = strlen(name);
   const char pre[] = "maps/";
@@ -17,20 +19,24 @@ void map_init(s_map *map, SDL_Renderer *renderer, char *name)
   char *layout_name = malloc(sizeof (pre) + len + sizeof (layout_suf));
   sprintf(bg_name, "%s%s%s", pre, name, bg_suf);
   sprintf(layout_name, "%s%s%s", pre, name, layout_suf);
-  SDL_Surface *bg_surf = IMG_Load(bg_name);
-  SDL_Surface *layout_surf = IMG_Load(layout_name);
+
+  // SDL_Surface *layout_surf = IMG_Load(layout_name);
+  // map->rect_list = rectangulize(layout_surf);
+
+  sprite_init_texture(&map->sprite, r, layout_name, 1.);
+
   free(bg_name);
   free(layout_name);
-  // map->rect_list = rectangulize(layout_surf);
-  map->texture = SDL_CreateTextureFromSurface(renderer, bg_surf);
-  map->size.x = bg_surf->w;
-  map->size.y = bg_surf->h;
-  SDL_FreeSurface(layout_surf);
-  SDL_FreeSurface(bg_surf);
+}
+
+
+void map_draw(s_map *map, s_renderer *renderer)
+{
+  sprite_draw(&map->sprite, renderer);
 }
 
 
 void map_destroy(s_map *map)
 {
-  SDL_DestroyTexture(map->texture);
+  sprite_destroy(&map->sprite);
 }
