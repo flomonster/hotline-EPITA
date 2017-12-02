@@ -45,9 +45,9 @@ void game_init(s_game *game)
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   renderer_init_font(&game->renderer, "res/font.ttf", 25);
   input_init(&game->input);
-  map_init(&game->map, &game->renderer, "test");
+  map_init(&game->map, &game->renderer, "fourth-floor");
   game->is_running = false;
-  player_init(&game->player, &game->renderer, VECT(50., 50.));
+  player_init(&game->player, &game->renderer, VECT(80., 80.));
 }
 
 

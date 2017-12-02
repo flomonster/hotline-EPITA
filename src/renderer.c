@@ -21,7 +21,7 @@ void renderer_init(s_renderer *r, SDL_Window *window,
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
                                              SDL_RENDERER_ACCELERATED);
   SDL_RenderSetScale(renderer, 1. / sample_factor, 1. / sample_factor);
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "anisotropic");
   r->renderer = renderer;
   r->sample_factor = sample_factor;
   r->font = NULL;

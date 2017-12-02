@@ -1,6 +1,6 @@
 #pragma once
 
-#define SCALE_FACTOR 4
+#define SCALE_FACTOR 1
 #define SAMPLE_FACTOR 10
 
 #ifndef M_PI
