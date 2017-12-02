@@ -5,7 +5,7 @@ LDLIBS = $(shell sdl2-config --libs)
 
 vpath %.c src
 
-OBJS = he.o context.o vect.o utils.o
+OBJS = he.o context.o vect.o utils.o pixutils.o
 DEPS = $(OBJS:.o=.d)
 
 BIN = he
