@@ -2,6 +2,7 @@
 
 #include "vect.h"
 #include "rect.h"
+#include "const.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -49,7 +50,7 @@ void renderer_init_font(s_renderer *r, char *font_name, int font_size)
 
 void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
 {
-  SDL_Surface *surf = TTF_RenderText_Blended(r->font, text, clr);
+  SDL_Surface *surf = TTF_RenderText_Solid(r->font, text, clr);
   if (surf == NULL)
   {
     SDL_Log("Unable to render text: %s\n", TTF_GetError());
@@ -58,8 +59,9 @@ void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
 
   SDL_Texture *tex = SDL_CreateTextureFromSurface(r->renderer, surf);
 
-  SDL_Rect dst = rect_to_SDL(RECT(pos, VECT(surf->w, surf->h)),
-                             r->sample_factor);
+  SDL_Rect dst = rect_to_SDL(
+    rect_mult(RECT(pos, VECT(surf->w, surf->h)), SCALE_FACTOR),
+    r->sample_factor);
   SDL_RenderCopy(r->renderer, tex, NULL, &dst);
 
   SDL_FreeSurface(surf);
@@ -71,6 +73,7 @@ void renderer_draw(s_renderer *r)
 {
   SDL_RenderPresent(r->renderer);
 }
+
 
 void renderer_destroy(s_renderer *r)
 {
