@@ -35,3 +35,4 @@ void entity_init_texture(s_entity *ent, s_context *cont, char *text_path,
 void entity_init(s_entity *ent, s_vect pos, e_dir dir, double angle);
 void entity_destroy(s_entity *ent);
 SDL_Rect entity_rect(s_entity *entity);
+void entity_draw(s_context *cont, s_entity *entity);

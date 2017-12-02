@@ -31,3 +31,11 @@ void entity_destroy(s_entity *ent)
 {
   SDL_DestroyTexture(ent->texture);
 }
+
+
+void entity_draw(s_context *cont, s_entity *entity)
+{
+  SDL_Rect rect = entity_rect(entity);
+  SDL_RenderCopyEx(cont->renderer, entity->texture, NULL, &rect,
+                   entity->angle, NULL, SDL_FLIP_NONE);
+}
