@@ -24,6 +24,8 @@ void map_init(s_map *map, s_renderer *r, char *name)
   // map->rect_list = rectangulize(layout_surf);
 
   sprite_init_texture(&map->sprite, r, bg_name);
+  s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
+  sprite_init(&map->sprite, center_pos, 0.);
 
   free(bg_name);
   free(layout_name);
