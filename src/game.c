@@ -101,7 +101,7 @@ void game_loop(s_game *game)
 
     game_update(game);
     game_draw(game);
-    SDL_RenderPresent(game->renderer.renderer);
+    renderer_draw(&game->renderer);
 
     if (delta_time < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE - delta_time);

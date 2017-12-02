@@ -67,6 +67,11 @@ void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
 }
 
 
+void renderer_draw(s_renderer *r)
+{
+  SDL_RenderPresent(r->renderer);
+}
+
 void renderer_destroy(s_renderer *r)
 {
   SDL_DestroyRenderer(r->renderer);

@@ -30,3 +30,4 @@ void renderer_init(s_renderer *renderer, SDL_Window *window,
 void renderer_destroy(s_renderer *renderer);
 void renderer_init_font(s_renderer *r, char *font_name, int font_size);
 void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr);
+void renderer_draw(s_renderer *r);
