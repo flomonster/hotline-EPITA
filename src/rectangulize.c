@@ -6,35 +6,32 @@
 #include <SDL.h>
 #include <stdbool.h>
 
-#define PIX_EPSILON 20
 
-
-static bool is_wall(SDL_Surface *img, int x, int y)
+static bool is_interesting(SDL_Surface *img, int x, int y,
+                           const s_fill_conf *conf)
 {
-  Uint32 pval = get_pixel(img, x, y);
-  return (PIX_R(pval) < PIX_EPSILON
-          && PIX_G(pval) < PIX_EPSILON
-          && PIX_B(pval) < PIX_EPSILON);
+  return conf->interest(get_pixel(img, x, y));
 }
 
 
-static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
+static s_rect_list *fill_rect(SDL_Surface *img, int x, int y,
+                              const s_fill_conf *conf)
 {
   int lh = 1;
   int lw = 0;
 
   for (int i = x; i < img->w; i++)
   {
-    if (!is_wall(img, i, y))
+    if (!is_interesting(img, i, y, conf))
       break;
     lw++;
-    set_pixel(img, i, y, PIX_WHITE);
+    set_pixel(img, i, y, conf->fill_val);
   }
 
   do {
     bool cont = true;
     for (int i = x; i < x + lw; i++)
-      if (!is_wall(img, i, y + lh))
+      if (!is_interesting(img, i, y + lh, conf))
       {
         cont = false;
         break;
@@ -44,7 +41,7 @@ static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
       break;
 
     for (int i = x; i < x + lw; i++)
-      set_pixel(img, i, y + lh, PIX_WHITE);
+      set_pixel(img, i, y + lh, conf->fill_val);
 
     lh++;
   } while (y + lh < img->h);
@@ -55,15 +52,15 @@ static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
 }
 
 
-s_rect_list *rectangulize(SDL_Surface *img)
+s_rect_list *rectangulize(SDL_Surface *img, const s_fill_conf *conf)
 {
   s_rect_list *res = NULL;
 
   for (int y = 0; y < img->h; y++)
     for (int x = 0; x < img->w; x++)
-      if (is_wall(img, x, y))
+      if (is_interesting(img, x, y, conf))
       {
-        s_rect_list *new = fill_rect(img, x, y);
+        s_rect_list *new = fill_rect(img, x, y, conf);
         new->next = res;
         res = new;
       }

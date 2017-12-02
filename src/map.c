@@ -6,10 +6,13 @@
 #include "sprite.h"
 #include "rect.h"
 #include "const.h"
+#include "walls.h"
 
 #include <err.h>
 #include <SDL.h>
 #include <SDL_image.h>
+
+
 
 
 void map_init(s_map *map, s_renderer *r, char *name)
@@ -24,7 +27,7 @@ void map_init(s_map *map, s_renderer *r, char *name)
   sprintf(layout_name, "%s%s%s", pre, name, layout_suf);
 
   SDL_Surface *layout_surf = IMG_Load(layout_name);
-  map->rect_list = rectangulize(layout_surf);
+  map->walls = wall_find(layout_surf);
 
   sprite_init_texture(&map->sprite, r, bg_name);
   s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
@@ -42,7 +45,7 @@ void map_draw(s_map *map, s_renderer *renderer)
     warnx("%s\n", SDL_GetError());
 
   double scale = SAMPLE_FACTOR * SCALE_FACTOR;
-  for (s_rect_list *rect = map->rect_list; rect; rect = rect->next)
+  for (s_rect_list *rect = map->walls; rect; rect = rect->next)
   {
     const SDL_Rect *r = &rect->rect;
     if (SDL_RenderFillRect(renderer->renderer,

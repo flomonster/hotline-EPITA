@@ -43,7 +43,7 @@ void player_init(s_player *player, s_renderer *renderer, s_vect pos)
   s_sprite sprite;
   sprite_init_texture(&sprite, renderer, "res/player.png");
   sprite_init(&sprite, pos, 0);
-  entity_init(&player->entity, sprite, 2, 1);
+  entity_init(&player->entity, sprite, 2, 4);
 }
 
 

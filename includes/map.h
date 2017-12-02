@@ -12,7 +12,7 @@
 typedef struct map
 {
   s_sprite sprite;
-  s_rect_list *rect_list;
+  s_rect_list *walls;
   SDL_Surface *layout_surf;
 } s_map;
 
