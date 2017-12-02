@@ -53,7 +53,9 @@ void game_init(s_game *game)
 
 static void game_draw(s_game *game)
 {
-  map_draw(&game->map, &game->renderer);
+  SDL_SetRenderDrawColor(game->renderer.renderer, 0, 0, 0, 255);
+  SDL_RenderClear(game->renderer.renderer);
+  map_draw(&game->map, &game->renderer, game->debug);
   player_draw(&game->player, &game->renderer);
 }
 
@@ -70,6 +72,8 @@ static void game_update(s_game *game, double delta)
     game->debug = !game->debug;
 
   player_update(&game->player, game, delta);
+
+  renderer_update(&game->renderer, game);
 }
 
 

@@ -38,12 +38,11 @@ s_vect vect_mult(s_vect a, double s)
 }
 
 
-SDL_Point vect_to_SDL(s_vect v, double factor)
+SDL_Point vect_to_SDL(s_vect v)
 {
-  s_vect scaled = vect_mult(v, factor);
   SDL_Point p =
   {
-    .x = round(scaled.x), .y = round(scaled.y),
+    .x = round(v.x), .y = round(v.y),
   };
   return p;
 }

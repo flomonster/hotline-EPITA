@@ -31,4 +31,4 @@ typedef struct rect
 
 
 s_rect rect_mult(s_rect r, double factor);
-SDL_Rect rect_to_SDL(s_rect r, double factor);
+SDL_Rect rect_to_SDL(s_rect r);

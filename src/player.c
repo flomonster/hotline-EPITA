@@ -7,6 +7,7 @@
 #include "walls.h"
 
 #include <math.h>
+#include <err.h>
 
 
 static void player_move(s_player *player, e_dir dir, double delta)
@@ -74,10 +75,10 @@ void player_draw(s_player *player, s_renderer *renderer)
 
 void player_update(s_player *player, s_game *game, double delta)
 {
-  // Orientation
-  double dy = game->input.mouse_pos.y - player->entity.sprite.pos.y;
-  double dx = game->input.mouse_pos.x - player->entity.sprite.pos.x;
-  player->entity.sprite.angle = atan2(dy, dx) * 180. / M_PI + 90.;
+  s_vect d = vect_sub(
+    renderer_camera_to_absolute(&game->renderer, game->input.mouse_pos),
+    player->entity.sprite.pos);
+  player->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
 
   // Shoot
   if (game->input.left_click)

@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <stdbool.h>
 
 #include "rect_list.h"
 #include "vect.h"
@@ -18,5 +19,5 @@ typedef struct map
 
 
 void map_init(s_map *map, s_renderer *renderer, char *name);
-void map_draw(s_map *map, s_renderer *renderer);
+void map_draw(s_map *map, s_renderer *renderer, bool debug);
 void map_destroy(s_map *map);

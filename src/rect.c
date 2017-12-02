@@ -15,13 +15,12 @@ s_rect rect_mult(s_rect r, double factor)
 }
 
 
-SDL_Rect rect_to_SDL(s_rect r, double factor)
+SDL_Rect rect_to_SDL(s_rect r)
 {
-  s_rect scaled = rect_mult(r, factor);
   SDL_Rect out;
-  out.x = round(scaled.pos.x);
-  out.y = round(scaled.pos.y);
-  out.w = round(scaled.size.x);
-  out.h = round(scaled.size.y);
+  out.x = round(r.pos.x);
+  out.y = round(r.pos.y);
+  out.w = round(r.size.x);
+  out.h = round(r.size.y);
   return out;
 }
