@@ -91,7 +91,7 @@ void game_loop(s_game *game)
 
     game_draw(game);
     // TODO: call entities update functions
-
+    SDL_RenderPresent(game->renderer.renderer);
     if (delta_time < 1000 / FRAME_RATE)
       SDL_Delay(1000 / FRAME_RATE - delta_time);
   }
