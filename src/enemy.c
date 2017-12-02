@@ -17,6 +17,16 @@ static s_enemy *find_enemy(s_enemy_list *list, unsigned char id)
 }
 
 
+static void enemy_insert_waypoint(s_enemy *e, s_ivect_list *w)
+{
+  s_ivect_list **ip = &e->waypoints;
+  while (*ip && (*ip)->id < w->id)
+    ip = &(*ip)->next;
+  w->next = *ip;
+  *ip = w;
+}
+
+
 s_enemy_list *enemies_load(SDL_Surface *img)
 {
   s_enemy_list *elist = NULL;
@@ -41,10 +51,9 @@ s_enemy_list *enemies_load(SDL_Surface *img)
         }
 
         s_ivect_list *npoint = xmalloc(sizeof(*npoint));
-        npoint->next = e->waypoints;
         npoint->vect = IVECT(x, y);
         npoint->id = ENEMY_PATH_ID(pval);
-        e->waypoints = npoint;
+        enemy_insert_waypoint(e, npoint);
         e->waypoints_count++;
       }
     }
