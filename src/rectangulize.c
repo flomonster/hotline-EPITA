@@ -56,12 +56,14 @@ s_rect_list *rectangulize(SDL_Surface *img, const s_fill_conf *conf)
 {
   s_rect_list *res = NULL;
 
+  size_t cur_id = 0;
   for (int y = 0; y < img->h; y++)
     for (int x = 0; x < img->w; x++)
       if (is_interesting(img, x, y, conf))
       {
         s_rect_list *new = fill_rect(img, x, y, conf);
         new->next = res;
+        new->id = cur_id++;
         res = new;
       }
 
