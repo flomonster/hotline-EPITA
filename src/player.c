@@ -24,6 +24,19 @@ static void player_move(s_player *player, e_dir dir, double delta)
   }
 }
 
+static bool player_move_try(s_game *game, s_player *player, e_dir dir,
+                            double delta)
+{
+  s_vect mem = player->entity.sprite.pos;
+  player_move(player, dir, delta);
+  s_rect rect = sprite_rect(&player->entity.sprite);
+  if (wall_collides(&game->map, &rect))
+  {
+    player->entity.sprite.pos = mem;
+    return false;
+  }
+  return true;
+}
 
 void player_init(s_player *player, s_renderer *renderer, s_vect pos)
 {
@@ -61,20 +74,17 @@ void player_update(s_player *player, s_game *game, double delta)
   if ((dir & DIR_TOP) && (dir & DIR_BOTTOM))
     dir &= ~(DIR_BOTTOM | DIR_TOP);
 
-  s_vect mem = player->entity.sprite.pos;
-  player_move(player, dir, delta);
-  s_rect rect = sprite_rect(&player->entity.sprite);
-  if (wall_collides(&game->map, &rect))
-    player->entity.sprite.pos = mem;
-
-  /*
-  if ((dir | DIR_LEFT) || (dir | DIR_RIGHT))
-    player_move(player, dir);
-  if (!wall_collides(&game->map, &rect))
+  if (player_move_try(game, player, dir, delta))
     return;
-  else
-    player->entity.sprite.pos = mem;
-  */
+
+  if ((dir & DIR_LEFT) && player_move_try(game, player, DIR_LEFT, delta))
+    return;
+  if ((dir & DIR_RIGHT) && player_move_try(game, player, DIR_RIGHT, delta))
+    return;
+  if ((dir & DIR_TOP) && player_move_try(game, player, DIR_TOP, delta))
+    return;
+  if ((dir & DIR_BOTTOM) && player_move_try(game, player, DIR_BOTTOM, delta))
+    return;
 }
 
 
