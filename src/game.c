@@ -9,7 +9,7 @@
 void game_init(s_game *game)
 {
   game->context = context_create();
-  keyboard_init(&game->keyboard);
+  input_init(&game->input);
   map_init(&game->map, game->context->renderer, "test");
   game->isRunning = false;
 }
@@ -17,9 +17,9 @@ void game_init(s_game *game)
 
 static void game_handle_event(s_game *game, SDL_Event *event)
 {
-  keyboard_handle_event(&game->keyboard, event);
+  input_handle_event(&game->input, event);
 
-  if (keyboard_pressed(&game->keyboard, SDL_SCANCODE_ESCAPE))
+  if (input_pressed(&game->input, SDL_SCANCODE_ESCAPE))
     game->isRunning = false;
 
   switch (event->type)
