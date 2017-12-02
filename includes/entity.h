@@ -23,9 +23,9 @@ typedef enum dir
 typedef struct entity
 {
   e_dir dir;
-  s_sprite *sprite;
+  s_sprite sprite;
 } s_entity;
 
 
-void entity_init(s_entity *ent, s_sprite *s, e_dir dir);
+void entity_init(s_entity *ent, s_sprite s, e_dir dir);
 void entity_destroy(s_entity *ent);
