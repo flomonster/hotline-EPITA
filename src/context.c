@@ -45,10 +45,17 @@ s_context *context_create(void)
 
   map_init(&cont->map, cont->renderer, "test");
 
+  SDL_Rect src =
+  {
+    .x = 0, .y = 0, .w = cont->map.size.x, .h = cont->map.size.y,
+  };
+
   SDL_RenderCopy(cont->renderer,
                  cont->map.texture,
-                 &RECT(0, 0, cont->map.size.x, cont->map.size.y),
-                 &RECT(0, 0, cont->map.size.x, cont->map.size.y));
+                 &src,
+                 NULL);
+
+  SDL_RenderPresent(cont->renderer);
 
   return cont;
 }
