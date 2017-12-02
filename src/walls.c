@@ -23,7 +23,7 @@ s_rect_list *wall_find(SDL_Surface *img)
   const s_fill_conf wall_find_conf =
   {
     .interest = is_wall,
-    .fill_val = 0x00001100,
+    .fill_val = 0x0000ff00,
   };
   return rectangulize(img, &wall_find_conf);
 }
