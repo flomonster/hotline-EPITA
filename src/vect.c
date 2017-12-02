@@ -25,6 +25,13 @@ double vect_dist(s_vect a, s_vect b)
 }
 
 
+s_vect vect_normalize(s_vect a)
+{
+  double d = vect_dist(a, VECT(0, 0));
+  return VECT(a.x / d, a.y / d);
+}
+
+
 s_vect vect_mult(s_vect a, double s)
 {
   return VECT(a.x * s, a.y * s);
