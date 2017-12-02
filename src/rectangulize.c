@@ -24,11 +24,12 @@ static s_rect_list *fill_rect(SDL_Surface *img, int x, int y)
   int lw = 0;
 
   for (int i = x; i < img->w; i++)
-    if (is_wall(img, i, y))
-    {
-      lw++;
-      set_pixel(img, i, y, PIX_WHITE);
-    }
+  {
+    if (!is_wall(img, i, y))
+      break;
+    lw++;
+    set_pixel(img, i, y, PIX_WHITE);
+  }
 
   do {
     bool cont = true;
