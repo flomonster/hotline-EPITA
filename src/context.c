@@ -3,9 +3,10 @@
 #include <SDL_image.h>
 
 #include "context.h"
+#include "utils.h"
 
 
-s_context *context_create()
+s_context *context_create(void)
 {
   s_context *cont = malloc(sizeof (*cont));
 
@@ -41,6 +42,14 @@ s_context *context_create()
 
   cont->renderer = SDL_CreateRenderer(cont->window, -1,
                                       SDL_RENDERER_ACCELERATED);
+
+  map_init(&cont->map, cont->renderer, "test");
+
+  SDL_RenderCopy(cont->renderer,
+                 cont->map.texture,
+                 &RECT(0, 0, cont->map.size.x, cont->map.size.y),
+                 &RECT(0, 0, cont->map.size.x, cont->map.size.y));
+
   return cont;
 }
 

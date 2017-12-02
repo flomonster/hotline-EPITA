@@ -8,7 +8,9 @@ int main(int argc, char **argv)
 
   s_context *cont = context_create();
 
-  SDL_Delay(3000);
+
+
+  SDL_Delay(10000);
 
   context_free(cont);
 
