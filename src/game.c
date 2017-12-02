@@ -1,16 +1,60 @@
-#include "context.h"
 #include "game.h"
+#include "utils.h"
 
+#include <SDL.h>
+#include <SDL_image.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define FRAME_RATE 60
 
 
+static SDL_Window *window_create(void)
+{
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
+  {
+    SDL_Log("Unable to initialize SDL: %s\n", SDL_GetError());
+    return NULL;
+  }
+
+  SDL_Window *window = SDL_CreateWindow(
+             "Hotline EPITA",                    // window title
+              SDL_WINDOWPOS_UNDEFINED,           // initial x position
+              SDL_WINDOWPOS_UNDEFINED,           // initial y position
+              640,                               // width, in pixels
+              480,                               // height, in pixels
+              SDL_WINDOW_OPENGL                  // flags - see below
+              );
+
+  if (!window)
+  {
+    SDL_Log("Unable to initialize window: %s\n", SDL_GetError());
+    return NULL;
+  }
+
+  return window;
+}
+
+static SDL_Renderer *renderer_create(SDL_Window *window)
+{
+  if (!IMG_Init(IMG_INIT_PNG))
+  {
+    SDL_Log("Unable to initialize SDL_Image: %s\n", IMG_GetError());
+    return NULL;
+  }
+
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
+                                             SDL_RENDERER_ACCELERATED);
+
+  return renderer;
+}
+
 void game_init(s_game *game)
 {
-  game->context = context_create();
+  game->window = window_create();
+  game->renderer = renderer_create(game->window);
   input_init(&game->input);
-  map_init(&game->map, game->context->renderer, "test");
+  map_init(&game->map, game->renderer, "test");
   game->isRunning = false;
 }
 
@@ -41,12 +85,12 @@ static void game_draw(s_game *game)
     .w = game->map.size.x, .h = game->map.size.y,
   };
 
-  SDL_RenderCopy(game->context->renderer,
+  SDL_RenderCopy(game->renderer,
                  game->map.texture,
                  &src,
                  NULL);
 
-  SDL_RenderPresent(game->context->renderer);
+  SDL_RenderPresent(game->renderer);
 }
 
 
@@ -79,6 +123,7 @@ void game_loop(s_game *game)
 
 void game_destroy(s_game *game)
 {
-  context_free(game->context);
+  SDL_DestroyRenderer(game->renderer);
+  SDL_DestroyWindow(game->window);
   map_destroy(&game->map);
 }

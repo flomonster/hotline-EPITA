@@ -1,6 +1,5 @@
 #pragma once
 
-#include "context.h"
 #include "input.h"
 #include "map.h"
 
@@ -9,7 +8,8 @@
 
 typedef struct game
 {
-  s_context *context;
+  SDL_Window *window;
+  SDL_Renderer *renderer;
   s_input input;
   s_map map;
   bool isRunning;

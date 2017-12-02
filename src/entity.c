@@ -4,7 +4,7 @@
 #include "entity.h"
 
 
-void entity_init_texture(s_entity *ent, s_context *cont, char *text_path,
+void entity_init_texture(s_entity *ent, s_game *game, char *text_path,
                          float scale)
 {
   SDL_Surface *image = IMG_Load(text_path);
@@ -13,7 +13,7 @@ void entity_init_texture(s_entity *ent, s_context *cont, char *text_path,
     SDL_Log("IMG_load failed: %s\n", IMG_GetError());
     return;
   }
-  ent->texture = SDL_CreateTextureFromSurface(cont->renderer, image);
+  ent->texture = SDL_CreateTextureFromSurface(game->renderer, image);
   ent->size = VECT(image->w * scale, image->h * scale);
   SDL_FreeSurface(image);
 }
@@ -33,9 +33,9 @@ void entity_destroy(s_entity *ent)
 }
 
 
-void entity_draw(s_context *cont, s_entity *entity)
+void entity_draw(s_game *game, s_entity *entity)
 {
   SDL_Rect rect = entity_rect(entity);
-  SDL_RenderCopyEx(cont->renderer, entity->texture, NULL, &rect,
+  SDL_RenderCopyEx(game->renderer, entity->texture, NULL, &rect,
                    entity->angle, NULL, SDL_FLIP_NONE);
 }
