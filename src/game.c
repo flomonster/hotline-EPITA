@@ -43,32 +43,11 @@ void game_init(s_game *game)
   game->window = window_create();
   game->debug = false;
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
-  renderer_init_font(&game->renderer, "res/hellovetica.ttf", 8);
+  renderer_init_font(&game->renderer, "res/font.ttf", 25);
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "test");
   game->is_running = false;
-  player_init(&game->player, &game->renderer, VECT(50, 50));
-}
-
-
-static void game_handle_event(s_game *game, SDL_Event *event)
-{
-  input_handle_event(&game->input, event);
-
-  if (input_key_pressed(&game->input, SDL_SCANCODE_ESCAPE))
-    game->is_running = false;
-
-  if (input_key_pressed(&game->input, SDL_SCANCODE_TAB) && !game->debug)
-    game->debug = !game->debug;
-
-  switch (event->type)
-  {
-  case SDL_QUIT:
-    game->is_running = false;
-    break;
-  default:
-    break;
-  }
+  player_init(&game->player, &game->renderer, VECT(50., 50.));
 }
 
 
@@ -81,6 +60,15 @@ static void game_draw(s_game *game)
 
 static void game_update(s_game *game)
 {
+  input_update(&game->input);
+
+  if (input_should_quit(&game->input)
+      || input_key_down(&game->input, SDL_SCANCODE_ESCAPE))
+    game->is_running = false;
+
+  if (input_key_down(&game->input, SDL_SCANCODE_TAB))
+    game->debug = !game->debug;
+
   player_update(&game->player, game);
 }
 
@@ -98,10 +86,6 @@ void game_loop(s_game *game)
     time_last = time_now;
     time_now = SDL_GetPerformanceCounter();
     double delta_time = (time_now - time_last) * 1000 / frequency;
-
-    SDL_Event event;
-    while (SDL_WaitEventTimeout(&event, 0))
-      game_handle_event(game, &event);
 
     game_update(game);
     game_draw(game);
