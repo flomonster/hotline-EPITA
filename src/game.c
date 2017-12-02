@@ -18,6 +18,9 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 {
   keyboard_handle_event(&game->keyboard, event);
 
+  if (keyboard_pressed(&game->keyboard, SDL_SCANCODE_ESCAPE))
+    game->isRunning = false;
+
   switch (event->type)
   {
   case SDL_QUIT:
