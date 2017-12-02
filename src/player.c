@@ -1,3 +1,4 @@
+#include "collision.h"
 #include "const.h"
 #include "entity.h"
 #include "game.h"
@@ -22,6 +23,24 @@ static void player_move(s_player *player, e_dir dir, double delta)
                            player->entity.speed * delta * SAMPLE_FACTOR);
     player->entity.sprite.pos = vect_add(player->entity.sprite.pos, direction);
   }
+}
+
+static void player_shoot(s_game *game, s_player *player)
+{
+  s_vect p1 = player->entity.sprite.pos;
+  s_vect p2 = game->input.mouse_pos;
+
+  double dist_wall = INFINITY;
+  for (s_rect_list *rlist = game->map.rect_list; rlist; rlist = rlist->next)
+  {
+    SDL_Rect *r = &rlist->rect;
+    s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
+    float dist = vect_dist(player->entity.sprite.pos, wall_rect.pos);
+    if (dist < dist_wall && rect_raycast(p1, p2, wall_rect))
+      dist_wall = dist;
+
+  }
+  // TODO (Check impact with enemies)
 }
 
 static bool player_move_try(s_game *game, s_player *player, e_dir dir,
@@ -55,10 +74,16 @@ void player_draw(s_player *player, s_renderer *renderer)
 
 void player_update(s_player *player, s_game *game, double delta)
 {
+  // Orientation
   double dy = game->input.mouse_pos.y - player->entity.sprite.pos.y;
   double dx = game->input.mouse_pos.x - player->entity.sprite.pos.x;
   player->entity.sprite.angle = atan2(dy, dx) * 180. / M_PI + 90.;
 
+  // Shoot
+  if (game->input.left_click)
+    player_shoot(game, player);
+
+  // Move
   e_dir dir = DIR_NONE;
   if (input_key_pressed(&game->input, SDL_SCANCODE_W))
     dir |= DIR_TOP;

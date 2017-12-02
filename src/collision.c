@@ -1,5 +1,21 @@
 #include "collision.h"
 #include "game.h"
+#include "vect.h"
+
+
+static bool lines_intersect(s_vect l1p1, s_vect l1p2, s_vect l2p1, s_vect l2p2)
+{
+  float q = (l1p1.y - l2p1.y) * (l2p2.x - l2p1.x) -
+            (l1p1.x - l2p1.x) * (l2p2.y - l2p1.y);
+  float d = (l1p2.x - l1p1.x) * (l2p2.y - l2p1.y) -
+            (l1p2.y - l1p1.y) * (l2p2.x - l2p1.x);
+  if (!d) return false;
+  float r = q / d;
+  q = (l1p1.y - l2p1.y) * (l1p2.x - l1p1.x) -
+      (l1p1.x - l2p1.x) * (l1p2.y - l1p1.y);
+  float s = q / d;
+  return r >= 0 && r <= 1 && s >= 0 && s <= 1;
+}
 
 
 bool sdl_rect_collision(const SDL_Rect *A, const SDL_Rect *B)
@@ -45,4 +61,22 @@ bool rect_has_intersection(const s_rect *A, const s_rect *B)
       return false;
 
   return true;
+}
+
+
+bool rect_raycast(s_vect p1, s_vect p2, s_rect r)
+{
+  s_vect diff = vect_sub(p2, p1);
+  diff = vect_mult(diff, 100000);
+  p2 = VECT(p1.x + diff.x, p1.y + diff.y);
+  if (lines_intersect(p1, p2, VECT(r.pos.x, r.pos.y),
+                      VECT(r.pos.x + r.size.x, r.pos.y)) ||
+      lines_intersect(p1, p2, VECT(r.pos.x + r.size.x, r.pos.y),
+                      VECT(r.pos.x + r.size.x, r.pos.y + r.size.y)) ||
+      lines_intersect(p1, p2, VECT(r.pos.x + r.size.x, r.pos.y + r.size.y),
+                      VECT(r.pos.x, r.pos.y + r.size.y)) ||
+      lines_intersect(p1, p2, VECT(r.pos.x, r.pos.y + r.size.y),
+                      VECT(r.pos.x, r.pos.y + r.size.y)))
+    return true;
+  return false;
 }
