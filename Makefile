@@ -31,7 +31,7 @@ san: LDLIBS += -lasan -lubsan
 san: debug
 
 
-debug: CFLAGS += -ggdb -fstack-protector-all
+debug: CFLAGS += -g3 -O0 -fstack-protector-all
 debug: $(BIN)
 
 
