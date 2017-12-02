@@ -1,4 +1,4 @@
-#include "context.h"
+#include "game.h"
 
 
 int main(int argc, char **argv)
@@ -6,13 +6,12 @@ int main(int argc, char **argv)
   argc = argc;
   argv = argv;
 
-  s_context *cont = context_create();
+  s_game game;
+  game_init(&game);
 
+  game_loop(&game);
 
-
-  SDL_Delay(10000);
-
-  context_free(cont);
+  game_destroy(&game);
 
   return 0;
 }
