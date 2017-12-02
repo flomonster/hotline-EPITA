@@ -17,7 +17,7 @@ s_vect vect_sub(s_vect a, s_vect b)
 }
 
 
-float vect_dist(s_vect a, s_vect b)
+double vect_dist(s_vect a, s_vect b)
 {
   s_vect v = vect_sub(b, a);
   return sqrt(pow(v.x, 2) + pow(v.y, 2));
