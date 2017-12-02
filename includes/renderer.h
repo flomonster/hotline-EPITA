@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vect.h"
+#include "rect.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -22,7 +23,11 @@ typedef struct renderer
   SDL_Renderer *renderer;
   double sample_factor;
   TTF_Font *font;
+  s_vect camera;
 } s_renderer;
+
+
+struct game;
 
 
 void renderer_init(s_renderer *renderer, SDL_Window *window,
@@ -31,3 +36,9 @@ void renderer_destroy(s_renderer *renderer);
 void renderer_init_font(s_renderer *r, char *font_name, int font_size);
 void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr);
 void renderer_draw(s_renderer *r);
+void renderer_update(s_renderer *r, struct game *game);
+s_vect renderer_absolute_to_camera(s_renderer *r, s_vect v);
+s_vect renderer_camera_to_absolute(s_renderer *r, s_vect v);
+s_vect renderer_project(s_renderer *r, s_vect v);
+s_vect renderer_get_screen_size(s_renderer *r);
+void renderer_draw_rect(s_renderer *r, s_rect rect, SDL_Color c);
