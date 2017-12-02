@@ -10,6 +10,7 @@ void game_init(s_game *game)
 {
   game->context = context_create();
   keyboard_init(&game->keyboard);
+  map_init(&game->map, game->context->renderer, "test");
   game->isRunning = false;
 }
 
@@ -32,6 +33,23 @@ static void game_handle_event(s_game *game, SDL_Event *event)
 }
 
 
+static void game_draw(s_game *game)
+{
+  SDL_Rect src =
+  {
+    .x = 0, .y = 0,
+    .w = game->map.size.x, .h = game->map.size.y,
+  };
+
+  SDL_RenderCopy(game->context->renderer,
+                 game->map.texture,
+                 &src,
+                 NULL);
+
+  SDL_RenderPresent(game->context->renderer);
+}
+
+
 void game_loop(s_game *game)
 {
   game->isRunning = true;
@@ -50,6 +68,7 @@ void game_loop(s_game *game)
     while (SDL_WaitEventTimeout(&event, 0))
       game_handle_event(game, &event);
 
+    game_draw(game);
     // TODO: call entities update functions
 
     if (delta_time < 1000 / FRAME_RATE)
@@ -61,4 +80,5 @@ void game_loop(s_game *game)
 void game_destroy(s_game *game)
 {
   context_free(game->context);
+  map_destroy(&game->map);
 }

@@ -43,20 +43,6 @@ s_context *context_create(void)
   cont->renderer = SDL_CreateRenderer(cont->window, -1,
                                       SDL_RENDERER_ACCELERATED);
 
-  map_init(&cont->map, cont->renderer, "test");
-
-  SDL_Rect src =
-  {
-    .x = 0, .y = 0, .w = cont->map.size.x, .h = cont->map.size.y,
-  };
-
-  SDL_RenderCopy(cont->renderer,
-                 cont->map.texture,
-                 &src,
-                 NULL);
-
-  SDL_RenderPresent(cont->renderer);
-
   return cont;
 }
 

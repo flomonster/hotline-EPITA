@@ -28,3 +28,9 @@ void map_init(s_map *map, SDL_Renderer *renderer, char *name)
   SDL_FreeSurface(layout_surf);
   SDL_FreeSurface(bg_surf);
 }
+
+
+void map_destroy(s_map *map)
+{
+  SDL_DestroyTexture(map->texture);
+}

@@ -9,7 +9,6 @@ typedef struct context
 {
   SDL_Window *window;
   SDL_Renderer *renderer;
-  s_map map;
 } s_context;
 
 

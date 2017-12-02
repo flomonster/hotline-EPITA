@@ -16,3 +16,4 @@ typedef struct map
 
 
 void map_init(s_map *map, SDL_Renderer *renderer, char *name);
+void map_destroy(s_map *map);

@@ -2,6 +2,7 @@
 
 #include "context.h"
 #include "keyboard.h"
+#include "map.h"
 
 #include <stdbool.h>
 
@@ -10,6 +11,7 @@ typedef struct game
 {
   s_context *context;
   s_keyboard keyboard;
+  s_map map;
   bool isRunning;
 } s_game;
 
