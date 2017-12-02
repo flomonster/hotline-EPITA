@@ -9,6 +9,8 @@ void input_init(s_input *input)
   memset(input->keys, 0, sizeof (input->keys));
   input->mouse_pos.x = 0;
   input->mouse_pos.y = 0;
+  input->left_click = false;
+  input->right_click = false;
 }
 
 
@@ -31,6 +33,16 @@ void input_handle_event(s_input *input, SDL_Event *event)
     input->mouse_pos.x = event->motion.x;
     input->mouse_pos.y = event->motion.y;
     break;
+  case SDL_MOUSEBUTTONDOWN:
+    if (event->button.button == SDL_BUTTON_LEFT)
+      input->left_click = true;
+    if (event->button.button == SDL_BUTTON_RIGHT)
+      input->right_click = true;
+  case SDL_MOUSEBUTTONUP:
+    if (event->button.button == SDL_BUTTON_LEFT)
+      input->left_click = false;
+    if (event->button.button == SDL_BUTTON_RIGHT)
+      input->right_click = false;
   default:
     break;
   }

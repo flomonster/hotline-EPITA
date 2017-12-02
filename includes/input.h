@@ -11,6 +11,8 @@ typedef struct input
 {
   bool keys[1024];
   s_vect mouse_pos;
+  bool left_click;
+  bool right_click;
 } s_input;
 
 
