@@ -2,6 +2,7 @@
 
 #include "input.h"
 #include "map.h"
+#include "player.h"
 
 #include <stdbool.h>
 
@@ -13,6 +14,7 @@ typedef struct game
   s_input input;
   s_map map;
   bool is_running;
+  s_player player;
 } s_game;
 
 
