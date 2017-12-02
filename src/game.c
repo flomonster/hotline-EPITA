@@ -42,6 +42,7 @@ void game_init(s_game *game)
 {
   game->window = window_create();
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
+  renderer_init_font(&game->renderer, "res/hellovetica.ttf", 8);
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "test");
   game->is_running = false;
