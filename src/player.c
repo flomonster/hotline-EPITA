@@ -62,17 +62,10 @@ void player_update(s_player *player, s_game *game, double delta)
     dir &= ~(DIR_BOTTOM | DIR_TOP);
 
   s_vect mem = player->entity.sprite.pos;
-
-  s_rect rect = sprite_rect(&player->entity.sprite);
-
-  printf("BEFORE: %f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
   player_move(player, dir, delta);
-  printf("AFTER: %f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
-  if (!wall_collides(&game->map, &rect))
-    return;
-  player->entity.sprite.pos = mem;
-  printf("collide (roll back): ");
-  printf("%f\t%f\n", player->entity.sprite.pos.x, player->entity.sprite.pos.y);
+  s_rect rect = sprite_rect(&player->entity.sprite);
+  if (wall_collides(&game->map, &rect))
+    player->entity.sprite.pos = mem;
 
   /*
   if ((dir | DIR_LEFT) || (dir | DIR_RIGHT))
