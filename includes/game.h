@@ -12,7 +12,7 @@ typedef struct game
   s_renderer renderer;
   s_input input;
   s_map map;
-  bool isRunning;
+  bool is_running;
 } s_game;
 
 

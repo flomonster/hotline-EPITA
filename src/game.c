@@ -44,7 +44,7 @@ void game_init(s_game *game)
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "test");
-  game->isRunning = false;
+  game->is_running = false;
 }
 
 
@@ -53,12 +53,12 @@ static void game_handle_event(s_game *game, SDL_Event *event)
   input_handle_event(&game->input, event);
 
   if (input_key_pressed(&game->input, SDL_SCANCODE_ESCAPE))
-    game->isRunning = false;
+    game->is_running = false;
 
   switch (event->type)
   {
   case SDL_QUIT:
-    game->isRunning = false;
+    game->is_running = false;
     break;
   default:
     break;
@@ -74,13 +74,13 @@ static void game_draw(s_game *game)
 
 void game_loop(s_game *game)
 {
-  game->isRunning = true;
+  game->is_running = true;
 
   uint64_t time_last = 0;
   uint64_t time_now = 0;
   double frequency = SDL_GetPerformanceFrequency();
 
-  while (game->isRunning)
+  while (game->is_running)
   {
     time_last = time_now;
     time_now = SDL_GetPerformanceCounter();
