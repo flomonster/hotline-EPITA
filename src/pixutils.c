@@ -15,6 +15,7 @@ static void *get_pixel_data(SDL_Surface *img, int x, int y, int *bpp)
     return right_pixdata;
 }
 
+
 Uint32 get_pixel(SDL_Surface *img, int x, int y)
 {
   int bpp;
@@ -30,9 +31,9 @@ Uint32 get_pixel(SDL_Surface *img, int x, int y)
   {
     Uint8 *p = pixdata;
     if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-      return p[0] << 16 | p[1] << 8 | p[2];
+      return p[0] << 16 | p[1] << 8 | p[2] | 0xff000000;
     else
-      return p[0] | p[1] << 8 | p[2] << 16;
+      return p[0] | p[1] << 8 | p[2] << 16 | 0xff000000;
   }
   abort();
 }

@@ -38,23 +38,29 @@ static void player_shoot(s_game *game, s_player *player)
   {
     SDL_Rect *r = &rlist->rect;
     s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
-    float dist = vect_dist(p1, wall_rect.pos);
-    if (dist < dist_wall && rect_raycast(p1, p2, wall_rect))
-      dist_wall = dist;
-
+    s_vect res;
+    if (rect_raycast(&res, p1, p2, wall_rect))
+    {
+      float dist = vect_dist(p1, res);
+      if (dist < dist_wall)
+        dist_wall = dist;
+    }
   }
 
   s_enemy *enemy = NULL;
   s_enemy_list *el = game->map.enemies;
   while (el)
   {
-    float dist = vect_dist(p1, el->enemy.sprite.pos);
     s_rect enemy_rect = sprite_rect(&el->enemy.sprite, .5);
-    if (dist < dist_wall && el->enemy.life
-        && rect_raycast(p1, p2, enemy_rect))
+    s_vect res;
+    if (el->enemy.life && rect_raycast(&res, p1, p2, enemy_rect))
     {
-      dist_wall = dist;
-      enemy = &el->enemy;
+      float dist = vect_dist(p1, res);
+      if (dist < dist_wall)
+      {
+        enemy = &el->enemy;
+        dist_wall = dist;
+      }
     }
     el = el->next;
   }
@@ -85,8 +91,10 @@ s_vect player_find_pos(s_map *map)
   SDL_Surface *img = map->layout_surf;
   for (int y = 0; y < img->h; y++)
     for (int x = 0; x < img->w; x++)
+    {
       if (get_pixel(img, x, y) == 0xff0000ff)
         return VECT(x, y);
+    }
   errx(1, "couldn't find any played on the map");
 }
 

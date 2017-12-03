@@ -76,7 +76,7 @@ void game_destroy(s_game *game)
 void game_start(s_game *game)
 {
   game->is_game_over = false;
-  score_reset(&game->score, 20.);
+  score_reset(&game->score, 1000.);
   player_reset(&game->player, player_find_pos(&game->map));
 
   s_enemy_list *enemy = game->map.enemies;

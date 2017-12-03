@@ -42,15 +42,18 @@ static bool ennemy_has_shoot(s_enemy *enemy, s_game *game)
   {
     SDL_Rect *r = &rlist->rect;
     s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
-    float dist = vect_dist(p1, wall_rect.pos);
-    if (dist < dist_wall && rect_raycast(p1, p2, wall_rect))
-      dist_wall = dist;
+    s_vect res;
+    if (rect_raycast(&res, p1, p2, wall_rect))
+    {
+      float dist = vect_dist(p1, res);
+      if (dist < dist_wall)
+        dist_wall = dist;
+    }
   }
 
   float dist = vect_dist(p1, p2);
   return dist < dist_wall;
 }
-
 
 s_enemy_list *enemies_load(SDL_Surface *img)
 {
@@ -129,7 +132,6 @@ void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
     sprite_set_angle_origin(&sprite, VECT(-3., 35.));
     sprite_draw(&sprite, r, true);
   }
-
 
   if (!debug)
     return;
