@@ -30,7 +30,8 @@ static void player_move(s_player *player, e_dir dir, double delta)
 static void player_shoot(s_game *game, s_player *player)
 {
   s_vect p1 = player->entity.sprite.pos;
-  s_vect p2 = game->input.mouse_pos;
+  s_vect p2 = renderer_camera_to_absolute(&game->renderer,
+                                          game->input.mouse_pos);
 
   double dist_wall = INFINITY;
   for (s_rect_list *rlist = game->map.walls; rlist; rlist = rlist->next)
@@ -48,8 +49,9 @@ static void player_shoot(s_game *game, s_player *player)
   while (el)
   {
     float dist = vect_dist(p1, el->enemy.entity.sprite.pos);
-    s_rect enemy_rect = sprite_rect(&el->enemy.entity.sprite, 1);
-    if (dist < dist_wall && rect_raycast(p1, p2, enemy_rect))
+    s_rect enemy_rect = sprite_rect(&el->enemy.entity.sprite, .5);
+    if (dist < dist_wall && el->enemy.entity.life
+        && rect_raycast(p1, p2, enemy_rect))
     {
       dist_wall = dist;
       enemy = &el->enemy;
