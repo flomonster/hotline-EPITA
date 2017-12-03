@@ -112,3 +112,39 @@ void enemy_update(s_enemy *enemy, s_player *player, double delta)
                   enemy->entity.speed * delta * SAMPLE_FACTOR);
   enemy->entity.sprite.pos = vect_add(enemy->entity.sprite.pos, dir);
 }
+
+
+void enemy_destroy(s_enemy *enemy)
+{
+  entity_destroy(&enemy->entity);
+  while (enemy->waypoints)
+  {
+    s_ivect_list *tmp = enemy->waypoints;
+    enemy->waypoints = enemy->waypoints->next;
+    free(tmp);
+  }
+}
+
+
+s_enemy_list *enemy_remove(s_enemy_list *el, unsigned char enemy_id)
+{
+  if (!el)
+    return NULL;
+
+  if (el->enemy.id == enemy_id)
+  {
+    s_enemy_list *res = el->next;
+    enemy_destroy(&el->enemy);
+    free(el);
+    return res;
+  }
+
+  while (el->next->enemy.id != enemy_id)
+    el = el->next;
+
+  s_enemy_list *tmp = el->next;
+  el->next = tmp->next;
+  enemy_destroy(&tmp->enemy);
+  free(tmp);
+  return el;
+}
