@@ -76,6 +76,9 @@ void enemy_init(s_enemy *enemy, s_renderer *renderer)
 
 void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
 {
+  if (!enemy->entity.life)
+    return;
+
   sprite_draw(&enemy->entity.sprite, r, true);
   if (!debug)
     return;
@@ -90,6 +93,8 @@ void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
 
 void enemy_update(s_enemy *enemy, s_player *player, double delta)
 {
+  if (!enemy->entity.life)
+    return;
   player = player;
   s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
   if (vect_dist(enemy->entity.sprite.pos, next) < 1)
@@ -123,28 +128,4 @@ void enemy_destroy(s_enemy *enemy)
     enemy->waypoints = enemy->waypoints->next;
     free(tmp);
   }
-}
-
-
-s_enemy_list *enemy_remove(s_enemy_list *el, unsigned char enemy_id)
-{
-  if (!el)
-    return NULL;
-
-  if (el->enemy.id == enemy_id)
-  {
-    s_enemy_list *res = el->next;
-    enemy_destroy(&el->enemy);
-    free(el);
-    return res;
-  }
-
-  while (el->next->enemy.id != enemy_id)
-    el = el->next;
-
-  s_enemy_list *tmp = el->next;
-  el->next = tmp->next;
-  enemy_destroy(&tmp->enemy);
-  free(tmp);
-  return el;
 }

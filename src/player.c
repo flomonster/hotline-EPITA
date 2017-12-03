@@ -57,11 +57,7 @@ static void player_shoot(s_game *game, s_player *player)
     el = el->next;
   }
   if (enemy)
-  {
     enemy->entity.life--;
-    if (enemy->entity.life <= 0)
-      game->map.enemies = enemy_remove(game->map.enemies, enemy->id);
-  }
 }
 
 static bool player_move_try(s_game *game, s_player *player, e_dir dir,

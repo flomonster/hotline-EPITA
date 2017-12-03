@@ -30,4 +30,3 @@ s_enemy_list *enemies_load(SDL_Surface *img);
 void enemy_init(s_enemy *enemy, s_renderer *renderer);
 void enemy_draw(s_enemy *enemy, s_renderer *renderer, bool debug);
 void enemy_update(s_enemy *enemy, s_player *player, double delta);
-s_enemy_list *enemy_remove(s_enemy_list *el, unsigned char enemy_id);

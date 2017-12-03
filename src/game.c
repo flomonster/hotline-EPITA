@@ -74,6 +74,9 @@ void game_start(s_game *game)
     s_vect pos = VECT(enemy->enemy.waypoints->vect.x,
                       enemy->enemy.waypoints->vect.y);
     sprite_set_pos(&enemy->enemy.entity.sprite, pos);
+    enemy->enemy.entity.life = 2;
+    enemy->enemy.entity.sprite.angle = 0;
+    enemy->enemy.nextpoint = enemy->enemy.waypoints;
     enemy = enemy->next;
   }
 }
