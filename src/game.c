@@ -44,7 +44,6 @@ void game_init(s_game *game, const char *map_name)
   game->window = window_create();
   game->debug = false;
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
-  renderer_init_font(&game->renderer, "res/font.ttf", 20);
   input_init(&game->input);
   map_init(&game->map, &game->renderer, map_name);
   game->is_running = false;
@@ -59,6 +58,17 @@ void game_init(s_game *game, const char *map_name)
   }
 
   game_over_init(&game->game_over, &game->renderer);
+}
+
+
+void game_destroy(s_game *game)
+{
+  map_destroy(&game->map);
+  renderer_destroy(&game->renderer);
+  SDL_DestroyWindow(game->window);
+  player_destroy(&game->player);
+  game_over_destroy(&game->game_over);
+  score_destroy(&game->score);
 }
 
 
@@ -168,13 +178,4 @@ void game_loop(s_game *game)
     // 100% CPU.
     SDL_Delay(1);
   }
-}
-
-
-void game_destroy(s_game *game)
-{
-  map_destroy(&game->map);
-  renderer_destroy(&game->renderer);
-  SDL_DestroyWindow(game->window);
-  player_destroy(&game->player);
 }

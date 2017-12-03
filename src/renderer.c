@@ -6,7 +6,6 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 
 void renderer_init(s_renderer *r, SDL_Window *window,
@@ -24,35 +23,14 @@ void renderer_init(s_renderer *r, SDL_Window *window,
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "anisotropic");
   r->renderer = renderer;
   r->sample_factor = sample_factor;
-  r->font = NULL;
   r->camera = VECT(0, 0);
 }
 
 
-void renderer_init_font(s_renderer *r, char *font_name, int font_size)
+void renderer_render_text(s_renderer *r, s_font *font, char *text, s_vect pos,
+                          bool rel_to_camera)
 {
-  if (TTF_Init() == -1)
-  {
-    SDL_Log("Unable to initialize SDL_ttf: %s\n", TTF_GetError());
-    exit(1);
-  }
-
-  TTF_Font *font = TTF_OpenFont(font_name, font_size);
-
-  if (font == NULL)
-  {
-    SDL_Log("Unable to load font: %s\n", TTF_GetError());
-    exit(1);
-  }
-
-  r->font = font;
-}
-
-
-void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr,
-                          e_text_alignment ta, bool rel_to_camera)
-{
-  SDL_Surface *surf = TTF_RenderText_Blended(r->font, text, clr);
+  SDL_Surface *surf = TTF_RenderText_Blended(font->font, text, font->color);
   if (surf == NULL)
   {
     SDL_Log("Unable to render text: %s\n", TTF_GetError());
@@ -64,14 +42,14 @@ void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr,
   s_vect top_left = pos;
   s_vect size = VECT(surf->w, surf->h);
 
-  if (ta & ALIGN_VRIGHT)
+  if (font->alignment & ALIGN_VRIGHT)
     top_left = vect_sub(top_left, VECT(size.x, 0.));
-  else if (ta & ALIGN_VCENTER)
+  else if (font->alignment & ALIGN_VCENTER)
     top_left = vect_sub(top_left, VECT(size.x / 2., 0.));
 
-  if (ta & ALIGN_HBOTTOM)
+  if (font->alignment & ALIGN_HBOTTOM)
     top_left = vect_sub(top_left, VECT(0., size.y));
-  else if (ta & ALIGN_HCENTER)
+  else if (font->alignment & ALIGN_HCENTER)
     top_left = vect_sub(top_left, VECT(0., size.y / 2.));
 
   if (rel_to_camera)
@@ -97,11 +75,7 @@ void renderer_destroy(s_renderer *r)
 {
   SDL_DestroyRenderer(r->renderer);
   IMG_Quit();
-  if (r->font != NULL)
-  {
-    TTF_CloseFont(r->font);
-    TTF_Quit();
-  }
+  TTF_Quit();
 }
 
 

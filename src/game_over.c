@@ -12,7 +12,16 @@ void game_over_init(s_game_over *go, s_renderer *r)
 {
   sprite_init(&go->sprite_won, r, "res/game-over-won.png");
   sprite_init(&go->sprite_lost, r, "res/game-over-lost.png");
+  font_init(&go->font, "res/font-bold.ttf", 96);
+  font_set_color(&go->font, RGB(255, 255, 255));
+  font_set_alignment(&go->font, ALIGN_VCENTER | ALIGN_HCENTER);
   go->score = 0.;
+}
+
+
+void game_over_destroy(s_game_over *go)
+{
+  font_destroy(&go->font);
 }
 
 
@@ -39,6 +48,6 @@ void game_over_draw(s_game_over *go, s_renderer *r)
   int minutes = value_i / 60;
   int seconds = value_i % 60;
   sprintf(text, "%d:%02d", minutes, seconds);
-  renderer_render_text(r, text, vect_add(center, VECT(0, 60.)),
-    RGB(255, 255, 255), ALIGN_VCENTER | ALIGN_HCENTER, false);
+  renderer_render_text(r, &go->font, text, vect_add(center, VECT(0, 70.)),
+                       false);
 }

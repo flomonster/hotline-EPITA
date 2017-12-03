@@ -2,6 +2,7 @@
 #include "sprite.h"
 #include "renderer.h"
 #include "const.h"
+#include "font.h"
 
 #include <float.h>
 #include <stdbool.h>
@@ -14,6 +15,14 @@ void score_init(s_score *score, s_renderer *r)
   sprite_init(&score->sprite_red, r, "res/score-background-red.png");
   score->value = 0.;
   score->time_since_last_hit = DBL_MAX;
+  font_init(&score->font, "res/font.ttf", 16);
+  font_set_color(&score->font, RGB(255, 255, 255));
+}
+
+
+void score_destroy(s_score *score)
+{
+  font_destroy(&score->font);
 }
 
 
@@ -64,6 +73,6 @@ void score_draw(s_score *score, s_renderer *r)
   int minutes = value_i / 60;
   int seconds = value_i % 60;
   sprintf(text, "%d:%02d", minutes, seconds);
-  renderer_render_text(r, text, vect_sub(sprite.pos, VECT(21., 10.)),
-    RGB(255, 255, 255), 0, false);
+  renderer_render_text(r, &score->font, text,
+    vect_sub(sprite.pos, VECT(21., 10.)), false);
 }
