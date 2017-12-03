@@ -35,8 +35,6 @@ struct game;
 void renderer_init(s_renderer *renderer, SDL_Window *window,
                    double sample_factor);
 void renderer_destroy(s_renderer *renderer);
-TTF_Font *renderer_load_font(char *font_name, int font_size);
-void renderer_destroy_font(TTF_Font *font);
 void renderer_render_text(s_renderer *r, s_font *font, char *text, s_vect pos,
                           bool rel_to_camera);
 void renderer_draw(s_renderer *r);

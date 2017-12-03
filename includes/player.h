@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "sprite.h"
 
 struct game;
 struct map;
@@ -23,6 +24,7 @@ typedef struct player
 {
   s_entity entity;
   float lastshoot;
+  s_sprite sprite_shot;
 } s_player;
 
 

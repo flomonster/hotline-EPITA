@@ -75,7 +75,6 @@ void renderer_destroy(s_renderer *r)
 {
   SDL_DestroyRenderer(r->renderer);
   IMG_Quit();
-  TTF_Quit();
 }
 
 

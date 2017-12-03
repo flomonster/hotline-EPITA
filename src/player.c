@@ -94,12 +94,23 @@ void player_init(s_player *player, s_renderer *renderer)
   s_sprite sprite;
   sprite_init(&sprite, renderer, "res/player.png");
   entity_init(&player->entity, sprite, 2, 15);
+  sprite_init(&player->sprite_shot, renderer, "res/shot.png");
 }
 
 
 void player_draw(s_player *player, s_renderer *r, bool debug)
 {
   sprite_draw(&player->entity.sprite, r, true);
+
+  if (player->lastshoot < .1)
+  {
+    s_sprite sprite = player->sprite_shot;
+    sprite_set_pos(&sprite,
+      vect_add(player->entity.sprite.pos, VECT(11., -32.)));
+    sprite_set_angle(&sprite, player->entity.sprite.angle);
+    sprite_set_angle_origin(&sprite, VECT(-11., 32.));
+    sprite_draw(&sprite, r, true);
+  }
 
   if (!debug)
     return;
