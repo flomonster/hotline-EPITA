@@ -25,6 +25,7 @@ void renderer_init(s_renderer *r, SDL_Window *window,
   r->renderer = renderer;
   r->sample_factor = sample_factor;
   r->font = NULL;
+  r->camera = VECT(0, 0);
 }
 
 
