@@ -116,6 +116,19 @@ static void game_draw(s_game *game)
 }
 
 
+static bool game_is_finished(s_game *game)
+{
+  s_enemy_list *el = game->map.enemies;
+  while (el)
+  {
+    if (el->enemy.entity.life)
+      return false;
+    el = el->next;
+  }
+  return true;
+}
+
+
 static void game_update(s_game *game, double delta)
 {
   input_update(&game->input);
@@ -145,7 +158,7 @@ static void game_update(s_game *game, double delta)
 
   score_update(&game->score, delta);
 
-  if (game->score.value == 0.)
+  if (game->score.value == 0. || game_is_finished(game))
   {
     game->is_game_over = true;
     game_over_set_score(&game->game_over, game->score.value);
