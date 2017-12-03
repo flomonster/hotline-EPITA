@@ -9,4 +9,5 @@
 
 #define INVINCIBILITY_FRAME 2
 #define HIT_DAMAGE 10
-#define LOAD_TIME .2
+#define PLAYER_LOAD_TIME .2
+#define ENEMIES_LOAD_TIME 1

@@ -1,3 +1,4 @@
+#include "collision.h"
 #include "const.h"
 #include "enemy.h"
 #include "entity.h"
@@ -27,6 +28,26 @@ static void enemy_insert_waypoint(s_enemy *e, s_ivect_list *w)
     ip = &(*ip)->next;
   w->next = *ip;
   *ip = w;
+}
+
+
+static bool ennemy_has_shoot(s_enemy *enemy, s_game *game)
+{
+  s_vect p1 = enemy->entity.sprite.pos;
+  s_vect p2 = game->player.entity.sprite.pos;
+
+  double dist_wall = INFINITY;
+  for (s_rect_list *rlist = game->map.walls; rlist; rlist = rlist->next)
+  {
+    SDL_Rect *r = &rlist->rect;
+    s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
+    float dist = vect_dist(p1, wall_rect.pos);
+    if (dist < dist_wall && rect_raycast(p1, p2, wall_rect))
+      dist_wall = dist;
+  }
+
+  float dist = vect_dist(p1, p2);
+  return dist < dist_wall;
 }
 
 
@@ -67,6 +88,7 @@ s_enemy_list *enemies_load(SDL_Surface *img)
 
 void enemy_init(s_enemy *enemy, s_renderer *renderer)
 {
+  enemy->lastshoot = 0;
   enemy->nextpoint = enemy->waypoints;
   s_sprite sprite;
   sprite_init(&sprite, renderer, "res/enemy.png");
@@ -91,11 +113,10 @@ void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
 }
 
 
-void enemy_update(s_enemy *enemy, s_player *player, double delta)
+void enemy_update(s_enemy *enemy, s_game *game, double delta)
 {
   if (!enemy->entity.life)
     return;
-  player = player;
   s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
   if (vect_dist(enemy->entity.sprite.pos, next) < 1)
   {
@@ -104,6 +125,21 @@ void enemy_update(s_enemy *enemy, s_player *player, double delta)
     else
       enemy->nextpoint = enemy->waypoints;
     next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
+  }
+
+  // Shoot
+  enemy->lastshoot += delta;
+  if (ennemy_has_shoot(enemy, game))
+  {
+    s_vect d = vect_sub(game->player.entity.sprite.pos,
+                        enemy->entity.sprite.pos);
+    enemy->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+    if (enemy->lastshoot > ENEMIES_LOAD_TIME)
+    {
+      enemy->lastshoot = 0;
+      score_hit(&game->score);
+    }
+    return;
   }
 
   // Rotation

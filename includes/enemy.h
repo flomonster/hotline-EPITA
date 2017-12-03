@@ -8,6 +8,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+struct game;
+
 
 typedef struct enemy
 {
@@ -16,6 +18,7 @@ typedef struct enemy
   s_ivect_list *waypoints;
   s_ivect_list *nextpoint;
   s_entity entity;
+  float lastshoot;
 } s_enemy;
 
 
@@ -29,4 +32,4 @@ typedef struct enemy_list
 s_enemy_list *enemies_load(SDL_Surface *img);
 void enemy_init(s_enemy *enemy, s_renderer *renderer);
 void enemy_draw(s_enemy *enemy, s_renderer *renderer, bool debug);
-void enemy_update(s_enemy *enemy, s_player *player, double delta);
+void enemy_update(s_enemy *enemy, struct game *game, double delta);

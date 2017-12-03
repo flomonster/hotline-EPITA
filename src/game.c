@@ -152,7 +152,7 @@ static void game_update(s_game *game, double delta)
   s_enemy_list *enemy = game->map.enemies;
   while (enemy)
   {
-    enemy_update(&enemy->enemy, &game->player, delta);
+    enemy_update(&enemy->enemy, game, delta);
     enemy = enemy->next;
   }
 

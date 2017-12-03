@@ -132,7 +132,7 @@ void player_update(s_player *player, s_game *game, double delta)
 
   // Shoot
   player->lastshoot += delta;
-  if (player->lastshoot > LOAD_TIME && game->input.left_click)
+  if (player->lastshoot > PLAYER_LOAD_TIME && game->input.left_click)
   {
     player_shoot(game, player);
     player->lastshoot = 0;
