@@ -39,3 +39,4 @@ void enemy_init(s_enemy *enemy, s_renderer *renderer);
 void enemy_draw(s_enemy *enemy, s_renderer *renderer, bool debug);
 void enemy_update(s_enemy *enemy, struct game *game, double delta);
 void enemy_reset(s_enemy *enemy);
+void enemy_destroy(s_enemy *enemy);

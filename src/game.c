@@ -1,9 +1,10 @@
-#include "game.h"
-#include "renderer.h"
-#include "utils.h"
 #include "const.h"
-#include "score.h"
+#include "enemy.h"
+#include "game.h"
 #include "pixutils.h"
+#include "renderer.h"
+#include "score.h"
+#include "utils.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -69,9 +70,29 @@ void game_destroy(s_game *game)
   map_destroy(&game->map);
   renderer_destroy(&game->renderer);
   SDL_DestroyWindow(game->window);
+  SDL_Quit();
   player_destroy(&game->player);
   game_over_destroy(&game->game_over);
   score_destroy(&game->score);
+
+
+  s_enemy_list *enemy = game->map.enemies;
+  while (enemy)
+  {
+    s_enemy_list *tmp = enemy->next;
+    enemy_destroy(&enemy->enemy);
+    free(enemy);
+    enemy = tmp;
+  }
+
+
+  s_rect_list *walls = game->map.walls;
+  while (walls)
+  {
+    s_rect_list *tmp = walls->next;
+    free(walls);
+    walls = tmp;
+  }
 }
 
 

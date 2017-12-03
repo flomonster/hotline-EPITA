@@ -3,8 +3,9 @@ CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99
 CPPFLAGS = -MMD -iquote includes $(shell sdl2-config --cflags) \
 	$(shell pkg-config SDL2_image --cflags) \
 	$(shell pkg-config SDL2_ttf --cflags)
-LDLIBS = $(shell sdl2-config --libs) $(shell pkg-config SDL2_image --libs) \
+BASE_LDLIBS = $(shell sdl2-config --libs) $(shell pkg-config SDL2_image --libs) \
 	$(shell pkg-config SDL2_ttf --libs) -lm
+LDLIBS = $(BASE_LDLIBS)
 
 vpath %.c src
 
@@ -27,7 +28,7 @@ release: CFLAGS += -O3
 
 
 san: CFLAGS += -fsanitize=address -fsanitize=leak -fsanitize=undefined
-san: LDLIBS += -lasan -lubsan
+san: LDLIBS = -lasan -lubsan $(BASE_LDLIBS)
 san: debug
 
 
