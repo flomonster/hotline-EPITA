@@ -19,6 +19,9 @@ typedef struct enemy
   s_ivect_list *nextpoint;
   s_entity entity;
   float lastshoot;
+  s_sprite sprite;
+  s_sprite sprite_hurt;
+  double last_shot_at;
 } s_enemy;
 
 

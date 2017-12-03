@@ -8,6 +8,7 @@
 #include <SDL_image.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <float.h>
 
 #define FRAME_RATE 60
 
@@ -77,6 +78,7 @@ void game_start(s_game *game)
   game->is_game_over = false;
   sprite_set_pos(&game->player.entity.sprite, player_find_pos(&game->map));
   score_set_value(&game->score, 10.);
+  player_set_last_shot(&game->player, DBL_MAX);
 
   s_enemy_list *enemy = game->map.enemies;
   while (enemy)

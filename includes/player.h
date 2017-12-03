@@ -33,3 +33,4 @@ void player_init(s_player *player, s_renderer *renderer);
 void player_draw(s_player *player, s_renderer *renderer, bool debug);
 void player_update(s_player *player, struct game *game, double delta);
 void player_destroy(s_player *player);
+void player_set_last_shot(s_player *player, double last_shot);

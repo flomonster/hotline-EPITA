@@ -9,6 +9,7 @@
 
 #include <math.h>
 #include <err.h>
+#include <float.h>
 
 
 static void player_move(s_player *player, e_dir dir, double delta)
@@ -59,7 +60,10 @@ static void player_shoot(s_game *game, s_player *player)
     el = el->next;
   }
   if (enemy)
+  {
     enemy->entity.life--;
+    enemy->last_shot_at = 0.;
+  }
 }
 
 static bool player_move_try(s_game *game, s_player *player, e_dir dir,
@@ -90,11 +94,17 @@ s_vect player_find_pos(s_map *map)
 
 void player_init(s_player *player, s_renderer *renderer)
 {
-  player->lastshoot = 0;
+  player->lastshoot = DBL_MAX;
   s_sprite sprite;
   sprite_init(&sprite, renderer, "res/player.png");
   entity_init(&player->entity, sprite, 2, 15);
   sprite_init(&player->sprite_shot, renderer, "res/shot.png");
+}
+
+
+void player_set_last_shot(s_player *player, double last_shot)
+{
+  player->lastshoot = last_shot;
 }
 
 

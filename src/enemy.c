@@ -6,6 +6,8 @@
 #include "pixutils.h"
 #include "utils.h"
 
+#include <float.h>
+
 
 #define IS_ENEMY(PVal) (PIX_R(PVal) == 127)
 #define ENEMY_ID(PVal) PIX_G(PVal)
@@ -91,8 +93,10 @@ void enemy_init(s_enemy *enemy, s_renderer *renderer)
   enemy->lastshoot = 0;
   enemy->nextpoint = enemy->waypoints;
   s_sprite sprite;
-  sprite_init(&sprite, renderer, "res/enemy.png");
+  sprite_init(&enemy->sprite, renderer, "res/enemy.png");
+  sprite_init(&enemy->sprite_hurt, renderer, "res/enemy-hurt.png");
   entity_init(&enemy->entity, sprite, 2, 7);
+  enemy->last_shot_at = DBL_MAX;
 }
 
 
@@ -144,19 +148,28 @@ void enemy_update(s_enemy *enemy, s_game *game, double delta)
 
   // Rotation
   s_vect d = vect_sub(next, enemy->entity.sprite.pos);
-  enemy->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+  float angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
 
   // Move
   s_vect dir = VECT(next.x - enemy->entity.sprite.pos.x,
                     next.y - enemy->entity.sprite.pos.y);
   dir = vect_mult(vect_normalize(dir),
                   enemy->entity.speed * delta * SAMPLE_FACTOR);
-  enemy->entity.sprite.pos = vect_add(enemy->entity.sprite.pos, dir);
+  s_vect pos = vect_add(enemy->entity.sprite.pos, dir);
+
+  enemy->entity.sprite = enemy->last_shot_at < .1f
+    ? enemy->sprite_hurt
+    : enemy->sprite;
+  sprite_set_pos(&enemy->entity.sprite, pos);
+  sprite_set_angle(&enemy->entity.sprite, angle);
+
+  enemy->last_shot_at += delta;
 }
 
 
 void enemy_destroy(s_enemy *enemy)
 {
+  // TODO: Free sprites.
   entity_destroy(&enemy->entity);
   while (enemy->waypoints)
   {
