@@ -5,6 +5,7 @@
 #include "player.h"
 #include "rect.h"
 #include "walls.h"
+#include "pixutils.h"
 
 #include <math.h>
 #include <err.h>
@@ -57,6 +58,18 @@ static bool player_move_try(s_game *game, s_player *player, e_dir dir,
   }
   return true;
 }
+
+
+s_vect player_find_pos(s_map *map)
+{
+  SDL_Surface *img = map->layout_surf;
+  for (int y = 0; y < img->h; y++)
+    for (int x = 0; x < img->w; x++)
+      if (get_pixel(img, x, y) == 0xff0000ff)
+        return VECT(x, y);
+  errx(1, "couldn't find any played on the map");
+}
+
 
 void player_init(s_player *player, s_renderer *renderer, s_vect pos)
 {

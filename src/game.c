@@ -47,7 +47,7 @@ void game_init(s_game *game)
   input_init(&game->input);
   map_init(&game->map, &game->renderer, "fourth-floor");
   game->is_running = false;
-  player_init(&game->player, &game->renderer, VECT(80., 80.));
+  player_init(&game->player, &game->renderer, player_find_pos(&game->map));
 }
 
 
