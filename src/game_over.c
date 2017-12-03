@@ -16,6 +16,7 @@ void game_over_init(s_game_over *go, s_renderer *r)
   font_set_color(&go->font, RGB(255, 255, 255));
   font_set_alignment(&go->font, ALIGN_VCENTER | ALIGN_HCENTER);
   go->score = 0.;
+  go->max_score = 0.;
 }
 
 
@@ -25,9 +26,10 @@ void game_over_destroy(s_game_over *go)
 }
 
 
-void game_over_set_score(s_game_over *go, double score)
+void game_over_set_score(s_game_over *go, double score, double max_score)
 {
   go->score = score;
+  go->max_score = max_score;
 }
 
 
@@ -44,7 +46,7 @@ void game_over_draw(s_game_over *go, s_renderer *r)
     return;
 
   char text[64];
-  int value_i = go->score;
+  int value_i = go->max_score - go->score;
   int minutes = value_i / 60;
   int seconds = value_i % 60;
   sprintf(text, "%d:%02d", minutes, seconds);

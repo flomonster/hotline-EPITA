@@ -112,7 +112,7 @@ void player_reset(s_player *player, s_vect pos)
 {
   player->lastshoot = DBL_MAX;
   player->last_shot_at = DBL_MAX;
-  player->speed = 15;
+  player->speed = 25;
   player->sprite = player->sprite_normal;
 
   sprite_set_angle(&player->sprite, 0.);

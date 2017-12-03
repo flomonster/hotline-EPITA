@@ -3,12 +3,14 @@
 #include "utils.h"
 #include "const.h"
 #include "score.h"
+#include "pixutils.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <float.h>
+#include <err.h>
 
 #define FRAME_RATE 60
 
@@ -73,10 +75,24 @@ void game_destroy(s_game *game)
 }
 
 
+static double game_find_duration(s_map *map)
+{
+  SDL_Surface *img = map->layout_surf;
+  for (int y = 0; y < img->h; y++)
+    for (int x = 0; x < img->w; x++)
+    {
+      Uint32 pix = get_pixel(img, x, y);
+      if (PIX_R(pix) == 84)
+        return PIX_G(pix);
+    }
+  errx(1, "couldn't find any duration on the map");
+}
+
+
 void game_start(s_game *game)
 {
   game->is_game_over = false;
-  score_reset(&game->score, 1000.);
+  score_reset(&game->score, game_find_duration(&game->map));
   player_reset(&game->player, player_find_pos(&game->map));
 
   s_enemy_list *enemy = game->map.enemies;
@@ -157,7 +173,8 @@ static void game_update(s_game *game, double delta)
   if (game->score.value == 0. || game_is_finished(game))
   {
     game->is_game_over = true;
-    game_over_set_score(&game->game_over, game->score.value);
+    game_over_set_score(&game->game_over, game->score.value,
+                        game_find_duration(&game->map));
   }
 
   renderer_update(&game->renderer, game);

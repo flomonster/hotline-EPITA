@@ -148,15 +148,7 @@ void enemy_update(s_enemy *enemy, s_game *game, double delta)
 {
   if (!enemy->life)
     return;
-  s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
-  if (vect_dist(enemy->sprite.pos, next) < 1)
-  {
-    if (enemy->nextpoint->next)
-      enemy->nextpoint = enemy->nextpoint->next;
-    else
-      enemy->nextpoint = enemy->waypoints;
-    next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
-  }
+
 
   // Shoot
   enemy->lastshoot += delta;
@@ -178,8 +170,18 @@ void enemy_update(s_enemy *enemy, s_game *game, double delta)
       score_hit(&game->score);
     }
   }
-  else
+  else if (enemy->waypoints_count > 1)
   {
+    s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
+    if (vect_dist(enemy->sprite.pos, next) < 1)
+    {
+      if (enemy->nextpoint->next)
+        enemy->nextpoint = enemy->nextpoint->next;
+      else
+        enemy->nextpoint = enemy->waypoints;
+      next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
+    }
+
     // Rotation
     s_vect d = vect_sub(next, enemy->sprite.pos);
     angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
@@ -191,13 +193,17 @@ void enemy_update(s_enemy *enemy, s_game *game, double delta)
                     enemy->speed * delta * SAMPLE_FACTOR);
     pos = vect_add(enemy->sprite.pos, dir);
   }
+  else
+  {
+    angle = enemy->sprite.angle;
+    pos = enemy->sprite.pos;
+  }
 
   enemy->sprite = enemy->last_shot_at < .1f
     ? enemy->sprite_hurt
     : enemy->sprite_normal;
   sprite_set_pos(&enemy->sprite, pos);
   sprite_set_angle(&enemy->sprite, angle);
-
 }
 
 
