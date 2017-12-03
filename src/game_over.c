@@ -49,7 +49,8 @@ void game_over_draw(s_game_over *go, s_renderer *r)
   int value_i = go->max_score - go->score;
   int minutes = value_i / 60;
   int seconds = value_i % 60;
-  sprintf(text, "%d:%02d", minutes, seconds);
+  int ms = fmod((go->max_score - go->score), 1.) * 1000;
+  sprintf(text, "%d:%02d.%03d", minutes, seconds, ms);
   renderer_render_text(r, &go->font, text, vect_add(center, VECT(0, 70.)),
                        false);
 }
