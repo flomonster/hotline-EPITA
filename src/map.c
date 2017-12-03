@@ -28,9 +28,9 @@ void map_init(s_map *map, s_renderer *r, char *name)
   sprintf(bg_name, "%s%s%s", pre, name, bg_suf);
   sprintf(layout_name, "%s%s%s", pre, name, layout_suf);
 
-  SDL_Surface *layout_surf = IMG_Load(layout_name);
-  map->walls = wall_find(layout_surf);
-  map->enemies = enemies_load(layout_surf);
+  map->layout_surf = IMG_Load(layout_name);
+  map->walls = wall_find(map->layout_surf);
+  map->enemies = enemies_load(map->layout_surf);
   sprite_init_texture(&map->sprite, r, bg_name);
   s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
   sprite_init(&map->sprite, center_pos, 0.);
