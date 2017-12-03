@@ -9,3 +9,4 @@
 
 #define INVINCIBILITY_FRAME 2
 #define HIT_DAMAGE 10
+#define LOAD_TIME .2

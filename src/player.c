@@ -37,12 +37,31 @@ static void player_shoot(s_game *game, s_player *player)
   {
     SDL_Rect *r = &rlist->rect;
     s_rect wall_rect = RECT(VECT(r->x, r->y), VECT(r->w, r->h));
-    float dist = vect_dist(player->entity.sprite.pos, wall_rect.pos);
+    float dist = vect_dist(p1, wall_rect.pos);
     if (dist < dist_wall && rect_raycast(p1, p2, wall_rect))
       dist_wall = dist;
 
   }
-  // TODO (Check impact with enemies)
+
+  s_enemy *enemy = NULL;
+  s_enemy_list *el = game->map.enemies;
+  while (el)
+  {
+    float dist = vect_dist(p1, el->enemy.entity.sprite.pos);
+    s_rect enemy_rect = sprite_rect(&el->enemy.entity.sprite, 1);
+    if (dist < dist_wall && rect_raycast(p1, p2, enemy_rect))
+    {
+      dist_wall = dist;
+      enemy = &el->enemy;
+    }
+    el = el->next;
+  }
+  if (enemy)
+  {
+    enemy->entity.life--;
+    if (enemy->entity.life <= 0)
+      game->map.enemies = enemy_remove(game->map.enemies, enemy->id);
+  }
 }
 
 static bool player_move_try(s_game *game, s_player *player, e_dir dir,
@@ -73,6 +92,7 @@ s_vect player_find_pos(s_map *map)
 
 void player_init(s_player *player, s_renderer *renderer)
 {
+  player->lastshoot = 0;
   s_sprite sprite;
   sprite_init(&sprite, renderer, "res/player.png");
   entity_init(&player->entity, sprite, 2, 15);
@@ -102,8 +122,12 @@ void player_update(s_player *player, s_game *game, double delta)
   player->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
 
   // Shoot
-  if (game->input.left_click)
+  player->lastshoot += delta;
+  if (player->lastshoot > LOAD_TIME && game->input.left_click)
+  {
     player_shoot(game, player);
+    player->lastshoot = 0;
+  }
 
   // Move
   e_dir dir = DIR_NONE;

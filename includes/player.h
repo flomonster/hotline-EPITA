@@ -22,6 +22,7 @@ typedef enum dir
 typedef struct player
 {
   s_entity entity;
+  float lastshoot;
 } s_player;
 
 
