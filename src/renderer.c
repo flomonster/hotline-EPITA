@@ -149,3 +149,10 @@ void renderer_draw_rect(s_renderer *r, s_rect rect, SDL_Color c)
   SDL_SetRenderDrawColor(r->renderer, c.r, c.g, c.b, c.a);
   SDL_RenderFillRect(r->renderer, &sdl_rect);
 }
+
+
+void renderer_draw_line(s_renderer *r, s_vect from, s_vect to, SDL_Color c)
+{
+  SDL_SetRenderDrawColor(r->renderer, c.r, c.g, c.b, c.a);
+  SDL_RenderDrawLine(r->renderer, from.x, from.y, to.x, to.y);
+}

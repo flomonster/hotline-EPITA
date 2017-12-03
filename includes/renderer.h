@@ -55,3 +55,4 @@ s_vect renderer_camera_to_absolute(s_renderer *r, s_vect v);
 s_vect renderer_project(s_renderer *r, s_vect v);
 s_vect renderer_get_screen_size(s_renderer *r);
 void renderer_draw_rect(s_renderer *r, s_rect rect, SDL_Color c);
+void renderer_draw_line(s_renderer *r, s_vect from, s_vect to, SDL_Color c);
