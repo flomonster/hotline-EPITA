@@ -1,7 +1,6 @@
 #include "collision.h"
 #include "const.h"
 #include "enemy.h"
-#include "entity.h"
 #include "game.h"
 #include "pixutils.h"
 #include "utils.h"
@@ -35,8 +34,8 @@ static void enemy_insert_waypoint(s_enemy *e, s_ivect_list *w)
 
 static bool ennemy_has_shoot(s_enemy *enemy, s_game *game)
 {
-  s_vect p1 = enemy->entity.sprite.pos;
-  s_vect p2 = game->player.entity.sprite.pos;
+  s_vect p1 = enemy->sprite.pos;
+  s_vect p2 = game->player.sprite.pos;
 
   double dist_wall = INFINITY;
   for (s_rect_list *rlist = game->map.walls; rlist; rlist = rlist->next)
@@ -90,26 +89,52 @@ s_enemy_list *enemies_load(SDL_Surface *img)
 
 void enemy_init(s_enemy *enemy, s_renderer *renderer)
 {
-  enemy->lastshoot = 0;
-  enemy->nextpoint = enemy->waypoints;
-  s_sprite sprite;
-  sprite_init(&enemy->sprite, renderer, "res/enemy.png");
+  enemy_reset(enemy);
+  sprite_init(&enemy->sprite_shot, renderer, "res/shot.png");
+  sprite_init(&enemy->sprite_normal, renderer, "res/enemy.png");
   sprite_init(&enemy->sprite_hurt, renderer, "res/enemy-hurt.png");
-  entity_init(&enemy->entity, sprite, 2, 7);
+}
+
+
+void enemy_reset(s_enemy *enemy)
+{
+  enemy->lastshoot = DBL_MAX;
+  enemy->nextpoint = enemy->waypoints;
   enemy->last_shot_at = DBL_MAX;
+  enemy->life = 2;
+  enemy->speed = 7;
+
+  enemy->sprite = enemy->sprite_normal;
+
+  sprite_set_pos(&enemy->sprite, VECT(enemy->waypoints->vect.x,
+                 enemy->waypoints->vect.y));
+  sprite_set_angle(&enemy->sprite, 0.);
+  enemy->nextpoint = enemy->waypoints;
 }
 
 
 void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
 {
-  if (!enemy->entity.life)
+  if (!enemy->life)
     return;
 
-  sprite_draw(&enemy->entity.sprite, r, true);
+  sprite_draw(&enemy->sprite, r, true);
+
+  if (enemy->lastshoot < .1)
+  {
+    s_sprite sprite = enemy->sprite_shot;
+    sprite_set_pos(&sprite,
+      vect_add(enemy->sprite.pos, VECT(3., -35.)));
+    sprite_set_angle(&sprite, enemy->sprite.angle);
+    sprite_set_angle_origin(&sprite, VECT(-3., 35.));
+    sprite_draw(&sprite, r, true);
+  }
+
+
   if (!debug)
     return;
 
-  s_rect rect = sprite_rect(&enemy->entity.sprite, .5);
+  s_rect rect = sprite_rect(&enemy->sprite, .5);
   s_vect top_left = renderer_project(r,
     renderer_absolute_to_camera(r, rect.pos));
   s_vect size = renderer_project(r, rect.size);
@@ -119,10 +144,10 @@ void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
 
 void enemy_update(s_enemy *enemy, s_game *game, double delta)
 {
-  if (!enemy->entity.life)
+  if (!enemy->life)
     return;
   s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
-  if (vect_dist(enemy->entity.sprite.pos, next) < 1)
+  if (vect_dist(enemy->sprite.pos, next) < 1)
   {
     if (enemy->nextpoint->next)
       enemy->nextpoint = enemy->nextpoint->next;
@@ -133,44 +158,52 @@ void enemy_update(s_enemy *enemy, s_game *game, double delta)
 
   // Shoot
   enemy->lastshoot += delta;
+  enemy->last_shot_at += delta;
+
+  float angle;
+  s_vect pos;
+
   if (ennemy_has_shoot(enemy, game))
   {
-    s_vect d = vect_sub(game->player.entity.sprite.pos,
-                        enemy->entity.sprite.pos);
-    enemy->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+    s_vect d = vect_sub(game->player.sprite.pos,
+                        enemy->sprite.pos);
+    angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+    pos = enemy->sprite.pos;
     if (enemy->lastshoot > ENEMIES_LOAD_TIME)
     {
       enemy->lastshoot = 0;
+      game->player.last_shot_at = 0.;
       score_hit(&game->score);
     }
-    return;
+  }
+  else
+  {
+    // Rotation
+    s_vect d = vect_sub(next, enemy->sprite.pos);
+    angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+
+    // Move
+    s_vect dir = VECT(next.x - enemy->sprite.pos.x,
+                      next.y - enemy->sprite.pos.y);
+    dir = vect_mult(vect_normalize(dir),
+                    enemy->speed * delta * SAMPLE_FACTOR);
+    pos = vect_add(enemy->sprite.pos, dir);
   }
 
-  // Rotation
-  s_vect d = vect_sub(next, enemy->entity.sprite.pos);
-  float angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
-
-  // Move
-  s_vect dir = VECT(next.x - enemy->entity.sprite.pos.x,
-                    next.y - enemy->entity.sprite.pos.y);
-  dir = vect_mult(vect_normalize(dir),
-                  enemy->entity.speed * delta * SAMPLE_FACTOR);
-  s_vect pos = vect_add(enemy->entity.sprite.pos, dir);
-
-  enemy->entity.sprite = enemy->last_shot_at < .1f
+  enemy->sprite = enemy->last_shot_at < .1f
     ? enemy->sprite_hurt
-    : enemy->sprite;
-  sprite_set_pos(&enemy->entity.sprite, pos);
-  sprite_set_angle(&enemy->entity.sprite, angle);
+    : enemy->sprite_normal;
+  sprite_set_pos(&enemy->sprite, pos);
+  sprite_set_angle(&enemy->sprite, angle);
 
-  enemy->last_shot_at += delta;
 }
 
 
 void enemy_destroy(s_enemy *enemy)
 {
-  // TODO: Free sprites.
-  entity_destroy(&enemy->entity);
+  sprite_destroy(&enemy->sprite_normal);
+  sprite_destroy(&enemy->sprite_hurt);
+  sprite_destroy(&enemy->sprite_shot);
   while (enemy->waypoints)
   {
     s_ivect_list *tmp = enemy->waypoints;

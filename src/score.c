@@ -13,22 +13,22 @@ void score_init(s_score *score, s_renderer *r)
 {
   sprite_init(&score->sprite, r, "res/score-background.png");
   sprite_init(&score->sprite_red, r, "res/score-background-red.png");
-  score->value = 0.;
-  score->time_since_last_hit = DBL_MAX;
+  score_reset(score, 0.);
   font_init(&score->font, "res/font.ttf", 16);
   font_set_color(&score->font, RGB(255, 255, 255));
+}
+
+
+void score_reset(s_score *score, double value)
+{
+  score->value = value;
+  score->time_since_last_hit = DBL_MAX;
 }
 
 
 void score_destroy(s_score *score)
 {
   font_destroy(&score->font);
-}
-
-
-void score_set_value(s_score *score, double value)
-{
-  score->value = value;
 }
 
 

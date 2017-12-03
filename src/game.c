@@ -25,8 +25,8 @@ static SDL_Window *window_create(void)
              "Hotline EPITA",                    // window title
               SDL_WINDOWPOS_UNDEFINED,           // initial x position
               SDL_WINDOWPOS_UNDEFINED,           // initial y position
-              640,                               // width, in pixels
-              480,                               // height, in pixels
+              1000,                               // width, in pixels
+              1000,                               // height, in pixels
               SDL_WINDOW_OPENGL                  // flags - see below
               );
 
@@ -76,19 +76,13 @@ void game_destroy(s_game *game)
 void game_start(s_game *game)
 {
   game->is_game_over = false;
-  sprite_set_pos(&game->player.entity.sprite, player_find_pos(&game->map));
-  score_set_value(&game->score, 10.);
-  player_set_last_shot(&game->player, DBL_MAX);
+  score_reset(&game->score, 20.);
+  player_reset(&game->player, player_find_pos(&game->map));
 
   s_enemy_list *enemy = game->map.enemies;
   while (enemy)
   {
-    s_vect pos = VECT(enemy->enemy.waypoints->vect.x,
-                      enemy->enemy.waypoints->vect.y);
-    sprite_set_pos(&enemy->enemy.entity.sprite, pos);
-    enemy->enemy.entity.life = 2;
-    enemy->enemy.entity.sprite.angle = 0;
-    enemy->enemy.nextpoint = enemy->enemy.waypoints;
+    enemy_reset(&enemy->enemy);
     enemy = enemy->next;
   }
 }
@@ -123,7 +117,7 @@ static bool game_is_finished(s_game *game)
   s_enemy_list *el = game->map.enemies;
   while (el)
   {
-    if (el->enemy.entity.life)
+    if (el->enemy.life)
       return false;
     el = el->next;
   }

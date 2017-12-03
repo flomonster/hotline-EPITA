@@ -16,7 +16,7 @@ typedef struct score
 
 
 void score_init(s_score *score, s_renderer *r);
-void score_set_value(s_score *score, double value);
+void score_reset(s_score *score, double value);
 void score_hit(s_score *score);
 void score_update(s_score *score, double delta);
 void score_draw(s_score *score, s_renderer *r);

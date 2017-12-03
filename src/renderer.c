@@ -80,7 +80,7 @@ void renderer_destroy(s_renderer *r)
 
 void renderer_update(s_renderer *r, s_game *game)
 {
-  r->camera = game->player.entity.sprite.pos;
+  r->camera = game->player.sprite.pos;
 }
 
 

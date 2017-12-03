@@ -1,6 +1,5 @@
 #pragma once
 
-#include "entity.h"
 #include "sprite.h"
 
 struct game;
@@ -22,15 +21,19 @@ typedef enum dir
 
 typedef struct player
 {
-  s_entity entity;
+  double speed;
   float lastshoot;
+  s_sprite sprite;
+  s_sprite sprite_normal;
+  s_sprite sprite_hurt;
   s_sprite sprite_shot;
+  double last_shot_at;
 } s_player;
 
 
 s_vect player_find_pos(struct map *map);
 void player_init(s_player *player, s_renderer *renderer);
+void player_reset(s_player *player, s_vect pos);
 void player_draw(s_player *player, s_renderer *renderer, bool debug);
 void player_update(s_player *player, struct game *game, double delta);
 void player_destroy(s_player *player);
-void player_set_last_shot(s_player *player, double last_shot);

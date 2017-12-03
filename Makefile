@@ -8,7 +8,7 @@ LDLIBS = $(shell sdl2-config --libs) $(shell pkg-config SDL2_image --libs) \
 
 vpath %.c src
 
-OBJS = he.o vect.o utils.o pixutils.o rectangulize.o map.o entity.o \
+OBJS = he.o vect.o utils.o pixutils.o rectangulize.o map.o \
        game.o input.o sprite.o rect.o player.o renderer.o collision.o \
        walls.o enemy.o score.o game_over.o font.o
 DEPS = $(OBJS:.o=.d)
