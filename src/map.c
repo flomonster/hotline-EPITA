@@ -17,7 +17,7 @@
 
 
 
-void map_init(s_map *map, s_renderer *r, char *name)
+void map_init(s_map *map, s_renderer *r, const char *name)
 {
   size_t len = strlen(name);
   const char pre[] = "maps/";

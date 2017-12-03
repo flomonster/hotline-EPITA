@@ -21,6 +21,6 @@ typedef struct game
 } s_game;
 
 
-void game_init(s_game *game);
+void game_init(s_game *game, const char *map_name);
 void game_loop(s_game *game);
 void game_destroy(s_game *game);

@@ -20,6 +20,6 @@ typedef struct map
 } s_map;
 
 
-void map_init(s_map *map, s_renderer *renderer, char *name);
+void map_init(s_map *map, s_renderer *renderer, const char *name);
 void map_draw(s_map *map, s_renderer *renderer, bool debug);
 void map_destroy(s_map *map);

@@ -39,14 +39,14 @@ static SDL_Window *window_create(void)
 }
 
 
-void game_init(s_game *game)
+void game_init(s_game *game, const char *map_name)
 {
   game->window = window_create();
   game->debug = false;
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   renderer_init_font(&game->renderer, "res/font.ttf", 20);
   input_init(&game->input);
-  map_init(&game->map, &game->renderer, "chill");
+  map_init(&game->map, &game->renderer, map_name);
   game->is_running = false;
   player_init(&game->player, &game->renderer, player_find_pos(&game->map));
   score_init(&game->score, &game->renderer, 60.);
