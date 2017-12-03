@@ -49,7 +49,8 @@ void renderer_init_font(s_renderer *r, char *font_name, int font_size)
 }
 
 
-void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
+void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr,
+                          e_text_alignment ta, bool rel_to_camera)
 {
   SDL_Surface *surf = TTF_RenderText_Blended(r->font, text, clr);
   if (surf == NULL)
@@ -60,9 +61,25 @@ void renderer_render_text(s_renderer *r, char *text, s_vect pos, SDL_Color clr)
 
   SDL_Texture *tex = SDL_CreateTextureFromSurface(r->renderer, surf);
 
-  s_vect top_left = renderer_project(r, pos);
-  s_vect size = renderer_project(r, VECT(surf->w, surf->h));
-  SDL_Rect dst = rect_to_SDL(RECT(top_left, size));
+  s_vect top_left = pos;
+  s_vect size = VECT(surf->w, surf->h);
+
+  if (ta & ALIGN_VRIGHT)
+    top_left = vect_sub(top_left, VECT(size.x, 0.));
+  else if (ta & ALIGN_VCENTER)
+    top_left = vect_sub(top_left, VECT(size.x / 2., 0.));
+
+  if (ta & ALIGN_HBOTTOM)
+    top_left = vect_sub(top_left, VECT(0., size.y));
+  else if (ta & ALIGN_HCENTER)
+    top_left = vect_sub(top_left, VECT(0., size.y / 2.));
+
+  if (rel_to_camera)
+    top_left = renderer_absolute_to_camera(r, top_left);
+
+  s_vect scaled_top_left = renderer_project(r, top_left);
+  s_vect scaled_size = renderer_project(r, size);
+  SDL_Rect dst = rect_to_SDL(RECT(scaled_top_left, scaled_size));
   SDL_RenderCopy(r->renderer, tex, NULL, &dst);
 
   SDL_FreeSurface(surf);

@@ -16,8 +16,9 @@ typedef struct sprite
 } s_sprite;
 
 
-void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path);
-void sprite_init(s_sprite *s, s_vect pos, double angle);
+void sprite_init(s_sprite *s, s_renderer *r, char *text_path);
+void sprite_set_pos(s_sprite *s, s_vect pos);
+void sprite_set_angle(s_sprite *s, double angle);
 void sprite_destroy(s_sprite *s);
 s_rect sprite_rect(s_sprite *s, double factor);
 void sprite_draw(s_sprite *s, s_renderer *r, bool rel_to_camera);

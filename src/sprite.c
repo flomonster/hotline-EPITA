@@ -8,7 +8,7 @@
 #include <SDL_image.h>
 
 
-void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path)
+void sprite_init(s_sprite *s, s_renderer *r, char *text_path)
 {
   SDL_Surface *image = IMG_Load(text_path);
   if (!image)
@@ -19,12 +19,18 @@ void sprite_init_texture(s_sprite *s, s_renderer *r, char *text_path)
   s->texture = SDL_CreateTextureFromSurface(r->renderer, image);
   s->size = VECT(image->w, image->h);
   SDL_FreeSurface(image);
+  s->pos = VECT(0., 0.);
 }
 
 
-void sprite_init(s_sprite *s, s_vect pos, double angle)
+void sprite_set_pos(s_sprite *s, s_vect pos)
 {
   s->pos = pos;
+}
+
+
+void sprite_set_angle(s_sprite *s, double angle)
+{
   s->angle = angle;
 }
 

@@ -31,9 +31,9 @@ void map_init(s_map *map, s_renderer *r, const char *name)
   map->layout_surf = IMG_Load(layout_name);
   map->walls = wall_find(map->layout_surf);
   map->enemies = enemies_load(map->layout_surf);
-  sprite_init_texture(&map->sprite, r, bg_name);
+  sprite_init(&map->sprite, r, bg_name);
   s_vect center_pos = vect_add(VECT(0, 0), vect_mult(map->sprite.size, 0.5));
-  sprite_init(&map->sprite, center_pos, 0.);
+  sprite_set_pos(&map->sprite, center_pos);
 
   free(bg_name);
   free(layout_name);

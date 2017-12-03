@@ -71,11 +71,10 @@ s_vect player_find_pos(s_map *map)
 }
 
 
-void player_init(s_player *player, s_renderer *renderer, s_vect pos)
+void player_init(s_player *player, s_renderer *renderer)
 {
   s_sprite sprite;
-  sprite_init_texture(&sprite, renderer, "res/player.png");
-  sprite_init(&sprite, pos, 0);
+  sprite_init(&sprite, renderer, "res/player.png");
   entity_init(&player->entity, sprite, 2, 15);
 }
 

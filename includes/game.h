@@ -4,6 +4,7 @@
 #include "map.h"
 #include "player.h"
 #include "score.h"
+#include "game_over.h"
 
 #include <stdbool.h>
 
@@ -18,6 +19,8 @@ typedef struct game
   bool debug;
   s_player player;
   s_score score;
+  bool is_game_over;
+  s_game_over game_over;
 } s_game;
 
 

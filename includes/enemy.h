@@ -27,6 +27,6 @@ typedef struct enemy_list
 
 
 s_enemy_list *enemies_load(SDL_Surface *img);
-void enemy_init(s_enemy *enemy, s_renderer *renderer, s_vect pos);
+void enemy_init(s_enemy *enemy, s_renderer *renderer);
 void enemy_draw(s_enemy *enemy, s_renderer *renderer, bool debug);
 void enemy_update(s_enemy *enemy, s_player *player, double delta);

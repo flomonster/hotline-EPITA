@@ -8,14 +8,18 @@
 #include <stdio.h>
 
 
-void score_init(s_score *score, s_renderer *r, double value)
+void score_init(s_score *score, s_renderer *r)
 {
-  sprite_init_texture(&score->sprite, r, "res/score-background.png");
-  sprite_init_texture(&score->sprite_red, r, "res/score-background-red.png");
-  sprite_init(&score->sprite, VECT(-1000., -1000.), 0.);
-  sprite_init(&score->sprite_red, VECT(-1000., -1000.), 0.);
-  score->value = value;
+  sprite_init(&score->sprite, r, "res/score-background.png");
+  sprite_init(&score->sprite_red, r, "res/score-background-red.png");
+  score->value = 0.;
   score->time_since_last_hit = DBL_MAX;
+}
+
+
+void score_set_value(s_score *score, double value)
+{
+  score->value = value;
 }
 
 
@@ -52,7 +56,8 @@ void score_draw(s_score *score, s_renderer *r)
 {
   s_vect size = renderer_get_screen_size(r);
   s_sprite sprite = score_invincible(score) ? score->sprite_red : score->sprite;
-  sprite.pos = VECT(size.x - sprite.size.x / 2 - 20., sprite.size.y / 2 + 20.);
+  sprite_set_pos(&sprite,
+    VECT(size.x - sprite.size.x / 2 - 20., sprite.size.y / 2 + 20.));
   sprite_draw(&sprite, r, false);
   char text[64];
   int value_i = score->value;
@@ -60,5 +65,5 @@ void score_draw(s_score *score, s_renderer *r)
   int seconds = value_i % 60;
   sprintf(text, "%d:%02d", minutes, seconds);
   renderer_render_text(r, text, vect_sub(sprite.pos, VECT(21., 10.)),
-    RGB(255, 255, 255));
+    RGB(255, 255, 255), 0, false);
 }

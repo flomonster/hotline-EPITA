@@ -26,7 +26,7 @@ typedef struct player
 
 
 s_vect player_find_pos(struct map *map);
-void player_init(s_player *player, s_renderer *renderer, s_vect pos);
+void player_init(s_player *player, s_renderer *renderer);
 void player_draw(s_player *player, s_renderer *renderer, bool debug);
 void player_update(s_player *player, struct game *game, double delta);
 void player_destroy(s_player *player);

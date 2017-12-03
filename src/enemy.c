@@ -65,12 +65,11 @@ s_enemy_list *enemies_load(SDL_Surface *img)
 }
 
 
-void enemy_init(s_enemy *enemy, s_renderer *renderer, s_vect pos)
+void enemy_init(s_enemy *enemy, s_renderer *renderer)
 {
   enemy->nextpoint = enemy->waypoints;
   s_sprite sprite;
-  sprite_init_texture(&sprite, renderer, "res/enemy.png");
-  sprite_init(&sprite, pos, 0);
+  sprite_init(&sprite, renderer, "res/enemy.png");
   entity_init(&enemy->entity, sprite, 2, 7);
 }
 

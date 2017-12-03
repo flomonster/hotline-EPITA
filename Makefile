@@ -10,7 +10,7 @@ vpath %.c src
 
 OBJS = he.o vect.o utils.o pixutils.o rectangulize.o map.o entity.o \
        game.o input.o sprite.o rect.o player.o renderer.o collision.o \
-       walls.o enemy.o score.o
+       walls.o enemy.o score.o game_over.o
 DEPS = $(OBJS:.o=.d)
 
 BIN = he
