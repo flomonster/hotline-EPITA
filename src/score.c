@@ -3,8 +3,9 @@
 #include "renderer.h"
 #include "const.h"
 
-#include <stdio.h>
+#include <float.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 
 void score_init(s_score *score, s_renderer *r, double value)

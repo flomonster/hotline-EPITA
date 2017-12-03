@@ -1,6 +1,9 @@
+#include "const.h"
 #include "enemy.h"
-#include "utils.h"
+#include "entity.h"
+#include "game.h"
 #include "pixutils.h"
+#include "utils.h"
 
 
 #define IS_ENEMY(PVal) (PIX_R(PVal) == 127)
@@ -59,4 +62,54 @@ s_enemy_list *enemies_load(SDL_Surface *img)
     }
 
   return elist;
+}
+
+
+void enemy_init(s_enemy *enemy, s_renderer *renderer, s_vect pos)
+{
+  enemy->nextpoint = enemy->waypoints;
+  s_sprite sprite;
+  sprite_init_texture(&sprite, renderer, "res/enemy.png");
+  sprite_init(&sprite, pos, 0);
+  entity_init(&enemy->entity, sprite, 2, 7);
+}
+
+
+void enemy_draw(s_enemy *enemy, s_renderer *r, bool debug)
+{
+  sprite_draw(&enemy->entity.sprite, r, true);
+  if (!debug)
+    return;
+
+  s_rect rect = sprite_rect(&enemy->entity.sprite, .5);
+  s_vect top_left = renderer_project(r,
+    renderer_absolute_to_camera(r, rect.pos));
+  s_vect size = renderer_project(r, rect.size);
+  renderer_draw_rect(r, RECT(top_left, size), RGB(255, 0, 0));
+}
+
+
+void enemy_update(s_enemy *enemy, s_player *player, double delta)
+{
+  player = player;
+  s_vect next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
+  if (vect_dist(enemy->entity.sprite.pos, next) < 1)
+  {
+    if (enemy->nextpoint->next)
+      enemy->nextpoint = enemy->nextpoint->next;
+    else
+      enemy->nextpoint = enemy->waypoints;
+    next = VECT(enemy->nextpoint->vect.x, enemy->nextpoint->vect.y);
+  }
+
+  // Rotation
+  s_vect d = vect_sub(next, enemy->entity.sprite.pos);
+  enemy->entity.sprite.angle = atan2(d.y, d.x) * 180. / M_PI + 90.;
+
+  // Move
+  s_vect dir = VECT(next.x - enemy->entity.sprite.pos.x,
+                    next.y - enemy->entity.sprite.pos.y);
+  dir = vect_mult(vect_normalize(dir),
+                  enemy->entity.speed * delta * SAMPLE_FACTOR);
+  enemy->entity.sprite.pos = vect_add(enemy->entity.sprite.pos, dir);
 }

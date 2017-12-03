@@ -3,6 +3,7 @@
 #include "entity.h"
 
 struct game;
+struct map;
 
 typedef enum dir
 {
@@ -24,7 +25,7 @@ typedef struct player
 } s_player;
 
 
-s_vect player_find_pos(s_map *map);
+s_vect player_find_pos(struct map *map);
 void player_init(s_player *player, s_renderer *renderer, s_vect pos);
 void player_draw(s_player *player, s_renderer *renderer, bool debug);
 void player_update(s_player *player, struct game *game, double delta);

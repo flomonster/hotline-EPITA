@@ -46,10 +46,19 @@ void game_init(s_game *game)
   renderer_init(&game->renderer, game->window, SAMPLE_FACTOR);
   renderer_init_font(&game->renderer, "res/font.ttf", 20);
   input_init(&game->input);
-  map_init(&game->map, &game->renderer, "fourth-floor");
+  map_init(&game->map, &game->renderer, "chill");
   game->is_running = false;
   player_init(&game->player, &game->renderer, player_find_pos(&game->map));
   score_init(&game->score, &game->renderer, 60.);
+
+  s_enemy_list *enemy = game->map.enemies;
+  while (enemy)
+  {
+    s_vect pos = VECT(enemy->enemy.waypoints->vect.x,
+                      enemy->enemy.waypoints->vect.y);
+    enemy_init(&enemy->enemy, &game->renderer, pos);
+    enemy = enemy->next;
+  }
 }
 
 
@@ -60,6 +69,13 @@ static void game_draw(s_game *game)
   map_draw(&game->map, &game->renderer, game->debug);
   player_draw(&game->player, &game->renderer, game->debug);
   score_draw(&game->score, &game->renderer);
+
+  s_enemy_list *enemy = game->map.enemies;
+  while (enemy)
+  {
+    enemy_draw(&enemy->enemy, &game->renderer, game->debug);
+    enemy = enemy->next;
+  }
 }
 
 
@@ -79,6 +95,13 @@ static void game_update(s_game *game, double delta)
   score_update(&game->score, delta);
 
   renderer_update(&game->renderer, game);
+
+  s_enemy_list *enemy = game->map.enemies;
+  while (enemy)
+  {
+    enemy_update(&enemy->enemy, &game->player, delta);
+    enemy = enemy->next;
+  }
 }
 
 
